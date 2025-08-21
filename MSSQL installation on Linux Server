@@ -1,0 +1,839 @@
+login as: root
+root@192.168.0.136's password:
+    ┌──────────────────────────────────────────────────────────────────────┐
+    │                 • MobaXterm Personal Edition v23.6 •                 │
+    │               (SSH client, X server and network tools)               │
+    │                                                                      │
+    │ ⮞ SSH session to root@192.168.0.136                                  │
+    │   • Direct SSH      :  ✓                                             │
+    │   • SSH compression :  ✓                                             │
+    │   • SSH-browser     :  ✓                                             │
+    │   • X11-forwarding  :  ✓  (remote display is forwarded through SSH)  │
+    │                                                                      │
+    │ ⮞ For more info, ctrl+click on help or visit our website.            │
+    └──────────────────────────────────────────────────────────────────────┘
+
+Activate the web console with: systemctl enable --now cockpit.socket
+
+Register this system with Red Hat Insights: rhc connect
+
+Example:
+# rhc connect --activation-key <key> --organization <org>
+
+The rhc client and Red Hat Insights will enable analytics and additional
+management capabilities on your system.
+View your connected systems at https://console.redhat.com/insights
+
+You can learn more about how to register your system
+using rhc at https://red.ht/registration
+Last login: Thu Aug 21 21:03:49 2025
+/usr/bin/xauth:  file /root/.Xauthority does not exist
+[root@ms ~]# hostnamectl
+ Static hostname: ms.localdomain.com
+       Icon name: computer-vm
+         Chassis: vm 🖴
+      Machine ID: c6d155db4f154519b880d59e868f5387
+         Boot ID: f25fea8e653f4579be45cab3490bdf09
+  Virtualization: oracle
+Operating System: Red Hat Enterprise Linux 9.6 (Plow)
+     CPE OS Name: cpe:/o:redhat:enterprise_linux:9::baseos
+          Kernel: Linux 5.14.0-570.12.1.el9_6.x86_64
+    Architecture: x86-64
+ Hardware Vendor: innotek GmbH
+  Hardware Model: VirtualBox
+Firmware Version: VirtualBox
+[root@ms ~]#
+[root@ms ~]# ip r s
+default via 192.168.0.1 dev enp0s3 proto dhcp src 192.168.0.136 metric 100
+192.168.0.0/24 dev enp0s3 proto kernel scope link src 192.168.0.136 metric 100
+[root@ms ~]#
+[root@ms ~]# --Check SQL Server Status
+bash: --Check: command not found...
+[root@ms ~]# # --Check SQL Server Status
+[root@ms ~]#
+[root@ms ~]# systemctl status mssql-server
+Unit mssql-server.service could not be found.
+[root@ms ~]#
+[root@ms ~]# # Installing python2 is a mandatory prerequisite before installing SQL Server 2019. Below we are checking that it is installed.
+[root@ms ~]#
+[root@ms ~]# sudo alternatives --config python
+[root@ms ~]# python --version
+Python 3.9.21
+[root@ms ~]#
+[root@ms ~]# python --version
+Python 3.9.21
+[root@ms ~]#
+[root@ms ~]# # Now, we will setup the SQL Server 2019 repository in order to install SQL Server 2019. Run the below command to check and configure this repository.
+[root@ms ~]#
+[root@ms ~]# # --Check the configured repositories
+[root@ms ~]#
+[root@ms ~]# sudo ls /etc/yum.repos.d
+[root@ms ~]#
+[root@ms ~]# df -h
+Filesystem             Size  Used Avail Use% Mounted on
+devtmpfs               4.0M     0  4.0M   0% /dev
+tmpfs                  3.9G     0  3.9G   0% /dev/shm
+tmpfs                  1.6G  9.2M  1.6G   1% /run
+/dev/mapper/rhel-root   22G  4.5G   18G  21% /
+/dev/sda1              960M  365M  596M  38% /boot
+tmpfs                  798M  116K  798M   1% /run/user/0
+[root@ms ~]#
+[root@ms ~]# hostnamectl
+ Static hostname: ms.localdomain.com
+       Icon name: computer-vm
+         Chassis: vm 🖴
+      Machine ID: c6d155db4f154519b880d59e868f5387
+         Boot ID: f25fea8e653f4579be45cab3490bdf09
+  Virtualization: oracle
+Operating System: Red Hat Enterprise Linux 9.6 (Plow)
+     CPE OS Name: cpe:/o:redhat:enterprise_linux:9::baseos
+          Kernel: Linux 5.14.0-570.12.1.el9_6.x86_64
+    Architecture: x86-64
+ Hardware Vendor: innotek GmbH
+  Hardware Model: VirtualBox
+Firmware Version: VirtualBox
+[root@ms ~]#
+[root@ms ~]# # 1. Add the Microsoft SQL Server repo
+[root@ms ~]#
+[root@ms ~]# # Microsoft doesn’t provide a separate rhel/9 repo yet, but the RHEL 8 repo works fine for RHEL 9.
+[root@ms ~]#
+[root@ms ~]# sudo curl -o /etc/yum.repos.d/mssql-server.repo \
+https://packages.microsoft.com/config/rhel/8/mssql-server-2019.repo
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   444  100   444    0     0    930      0 --:--:-- --:--:-- --:--:--   928
+[root@ms ~]#
+[root@ms ~]# ls -l
+total 4
+-rw-------. 1 root root 1119 Aug 21 20:28 anaconda-ks.cfg
+drwxr-xr-x. 2 root root    6 Aug 21 21:03 Desktop
+drwxr-xr-x. 2 root root    6 Aug 21 21:03 Documents
+drwxr-xr-x. 2 root root    6 Aug 21 21:03 Downloads
+drwxr-xr-x. 2 root root    6 Aug 21 21:03 Music
+drwxr-xr-x. 2 root root    6 Aug 21 21:03 Pictures
+drwxr-xr-x. 2 root root    6 Aug 21 21:03 Public
+drwxr-xr-x. 2 root root    6 Aug 21 21:03 Templates
+drwxr-xr-x. 2 root root    6 Aug 21 21:03 Videos
+[root@ms ~]#
+[root@ms ~]# # After running this, verify with:
+[root@ms ~]#
+[root@ms ~]# ls /etc/yum.repos.d/
+mssql-server.repo
+[root@ms ~]#
+[root@ms ~]# # 2. Install SQL Server 2019
+[root@ms ~]#
+[root@ms ~]# sudo dnf install -y mssql-server
+Updating Subscription Management repositories.
+Unable to read consumer identity
+
+This system is not registered with an entitlement server. You can use "rhc" or "subscription-manager" to register.
+
+Microsoft SQL Server 2019                                                                                                               45  B/s | 481  B     00:10
+Microsoft SQL Server 2019                                                                                                               19 kB/s | 975  B     00:00
+Importing GPG key 0xBE1229CF:
+ Userid     : "Microsoft (Release signing) <gpgsecurity@microsoft.com>"
+ Fingerprint: BC52 8686 B50D 79E3 39D3 721C EB3E 94AD BE12 29CF
+ From       : https://packages.microsoft.com/keys/microsoft.asc
+Microsoft SQL Server 2019                                                                                                              0.0  B/s |   0  B     00:28
+Errors during downloading metadata for repository 'packages-microsoft-com-mssql-server-2019':
+  - Curl error (60): SSL peer certificate or SSH remote key was not OK for https://packages.microsoft.com/rhel/8/mssql-server-2019/repodata/repomd.xml.asc [SSL certificate problem: self-signed certificate]
+Error: Failed to download metadata for repo 'packages-microsoft-com-mssql-server-2019': GPG verification is enabled, but GPG signature is not available. This may be an error or the repository does not support GPG verification: Curl error (60): SSL peer certificate or SSH remote key was not OK for https://packages.microsoft.com/rhel/8/mssql-server-2019/repodata/repomd.xml.asc [SSL certificate problem: self-signed certificate]
+[root@ms ~]#
+[root@ms ~]# subscription-manager register
+Registering to: subscription.rhsm.redhat.com:443/subscription
+Username: kedarab2
+Password:
+Error loading certificate: [Errno 2] No such file or directory: '/etc/pki/consumer/cert.pem'
+[root@ms ~]#
+[root@ms ~]# sudo vi /etc/yum.repos.d/mssql-server.repo
+[root@ms ~]#
+[root@ms ~]# sudo dnf clean all
+Updating Subscription Management repositories.
+Unable to read consumer identity
+
+This system is not registered with an entitlement server. You can use "rhc" or "subscription-manager" to register.
+
+0 files removed
+[root@ms ~]#
+[root@ms ~]# subscription-manager register
+Registering to: subscription.rhsm.redhat.com:443/subscription
+Username: kedarab2
+Password:
+The system has been registered with ID: 888762b6-1cc6-4b1a-95c8-1ce488de039f
+The registered system name is: ms.localdomain.com
+[root@ms ~]#
+[root@ms ~]# ls /etc/yum.repos.d/
+mssql-server.repo  redhat.repo
+[root@ms ~]#
+[root@ms ~]#
+[root@ms ~]# # 2. Install SQL Server 2019
+[root@ms ~]# sudo dnf install -y mssql-server
+Updating Subscription Management repositories.
+Microsoft SQL Server 2019                                                                                                              334 kB/s | 5.5 MB     00:16
+Red Hat Enterprise Linux 9 for x86_64 - AppStream (RPMs)                                                                               3.8 MB/s |  66 MB     00:17
+Red Hat Enterprise Linux 9 for x86_64 - BaseOS (RPMs)                                                                                  3.9 MB/s |  72 MB     00:18
+Last metadata expiration check: 0:00:06 ago on Thu 21 Aug 2025 09:24:22 PM IST.
+Dependencies resolved.
+=======================================================================================================================================================================
+ Package                              Architecture               Version                            Repository                                                    Size
+=======================================================================================================================================================================
+Installing:
+ mssql-server                         x86_64                     15.0.4440.1-1                      packages-microsoft-com-mssql-server-2019                     229 M
+Installing dependencies:
+ boost-regex                          x86_64                     1.75.0-10.el9                      rhel-9-for-x86_64-appstream-rpms                             278 k
+ cyrus-sasl                           x86_64                     2.1.27-21.el9                      rhel-9-for-x86_64-baseos-rpms                                 77 k
+ gdb                                  x86_64                     14.2-4.1.el9_6                     rhel-9-for-x86_64-appstream-rpms                             140 k
+ gdb-headless                         x86_64                     14.2-4.1.el9_6                     rhel-9-for-x86_64-appstream-rpms                             4.8 M
+ libipt                               x86_64                     2.0.4-5.el9                        rhel-9-for-x86_64-appstream-rpms                              58 k
+ source-highlight                     x86_64                     3.1.9-12.el9                       rhel-9-for-x86_64-appstream-rpms                             685 k
+
+Transaction Summary
+=======================================================================================================================================================================
+Install  7 Packages
+
+Total download size: 235 M
+Installed size: 1.1 G
+Downloading Packages:
+(1/7): libipt-2.0.4-5.el9.x86_64.rpm                                                                                                   101 kB/s |  58 kB     00:00
+(2/7): source-highlight-3.1.9-12.el9.x86_64.rpm                                                                                        954 kB/s | 685 kB     00:00
+(3/7): boost-regex-1.75.0-10.el9.x86_64.rpm                                                                                            725 kB/s | 278 kB     00:00
+(4/7): gdb-14.2-4.1.el9_6.x86_64.rpm                                                                                                   385 kB/s | 140 kB     00:00
+(5/7): cyrus-sasl-2.1.27-21.el9.x86_64.rpm                                                                                             202 kB/s |  77 kB     00:00
+(6/7): gdb-headless-14.2-4.1.el9_6.x86_64.rpm                                                                                          3.4 MB/s | 4.8 MB     00:01
+(7/7): mssql-server-15.0.4440.1-1.x86_64.rpm                                                                                           394 kB/s | 229 MB     09:53
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total                                                                                                                                  405 kB/s | 235 MB     09:53
+Red Hat Enterprise Linux 9 for x86_64 - AppStream (RPMs)                                                                               3.0 MB/s | 3.6 kB     00:00
+Importing GPG key 0xFD431D51:
+ Userid     : "Red Hat, Inc. (release key 2) <security@redhat.com>"
+ Fingerprint: 567E 347A D004 4ADE 55BA 8A5F 199E 2F91 FD43 1D51
+ From       : /etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+Key imported successfully
+Importing GPG key 0x5A6340B3:
+ Userid     : "Red Hat, Inc. (auxiliary key 3) <security@redhat.com>"
+ Fingerprint: 7E46 2425 8C40 6535 D56D 6F13 5054 E4A4 5A63 40B3
+ From       : /etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+Key imported successfully
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                                                                                                               1/1
+  Running scriptlet: cyrus-sasl-2.1.27-21.el9.x86_64                                                                                                               1/7
+  Installing       : cyrus-sasl-2.1.27-21.el9.x86_64                                                                                                               1/7
+  Running scriptlet: cyrus-sasl-2.1.27-21.el9.x86_64                                                                                                               1/7
+  Installing       : boost-regex-1.75.0-10.el9.x86_64                                                                                                              2/7
+  Installing       : source-highlight-3.1.9-12.el9.x86_64                                                                                                          3/7
+  Installing       : libipt-2.0.4-5.el9.x86_64                                                                                                                     4/7
+  Installing       : gdb-headless-14.2-4.1.el9_6.x86_64                                                                                                            5/7
+  Installing       : gdb-14.2-4.1.el9_6.x86_64                                                                                                                     6/7
+  Running scriptlet: mssql-server-15.0.4440.1-1.x86_64                                                                                                             7/7
+  Installing       : mssql-server-15.0.4440.1-1.x86_64                                                                                                             7/7
+  Running scriptlet: mssql-server-15.0.4440.1-1.x86_64                                                                                                             7/7
+
++--------------------------------------------------------------+
+Please run 'sudo /opt/mssql/bin/mssql-conf setup'
+to complete the setup of Microsoft SQL Server
++--------------------------------------------------------------+
+
+
+  Verifying        : mssql-server-15.0.4440.1-1.x86_64                                                                                                             1/7
+  Verifying        : libipt-2.0.4-5.el9.x86_64                                                                                                                     2/7
+  Verifying        : source-highlight-3.1.9-12.el9.x86_64                                                                                                          3/7
+  Verifying        : boost-regex-1.75.0-10.el9.x86_64                                                                                                              4/7
+  Verifying        : gdb-14.2-4.1.el9_6.x86_64                                                                                                                     5/7
+  Verifying        : gdb-headless-14.2-4.1.el9_6.x86_64                                                                                                            6/7
+  Verifying        : cyrus-sasl-2.1.27-21.el9.x86_64                                                                                                               7/7
+Installed products updated.
+
+Installed:
+  boost-regex-1.75.0-10.el9.x86_64   cyrus-sasl-2.1.27-21.el9.x86_64       gdb-14.2-4.1.el9_6.x86_64  gdb-headless-14.2-4.1.el9_6.x86_64  libipt-2.0.4-5.el9.x86_64
+  mssql-server-15.0.4440.1-1.x86_64  source-highlight-3.1.9-12.el9.x86_64
+
+Complete!
+[root@ms ~]#
+[root@ms ~]# sudo /opt/mssql/bin/mssql-conf setup
+Choose an edition of SQL Server:
+  1) Evaluation (free, no production use rights, 180-day limit)
+  2) Developer (free, no production use rights)
+  3) Express (free)
+  4) Web (PAID)
+  5) Standard (PAID)
+  6) Enterprise (PAID) - CPU Core utilization restricted to 20 physical/40 hyperthreaded
+  7) Enterprise Core (PAID) - CPU Core utilization up to Operating System Maximum
+  8) I bought a license through a retail sales channel and have a product key to enter.
+
+Details about editions can be found at
+https://go.microsoft.com/fwlink/?LinkId=2109348&clcid=0x409
+
+Use of PAID editions of this software requires separate licensing through a
+Microsoft Volume Licensing program.
+By choosing a PAID edition, you are verifying that you have the appropriate
+number of licenses in place to install and run this software.
+
+Enter your edition(1-8): 3
+The license terms for this product can be found in
+/usr/share/doc/mssql-server or downloaded from:
+https://go.microsoft.com/fwlink/?LinkId=2104294&clcid=0x409
+
+The privacy statement can be viewed at:
+https://go.microsoft.com/fwlink/?LinkId=853010&clcid=0x409
+
+Do you accept the license terms? [Yes/No]:Yes
+
+Enter the SQL Server system administrator password:
+The specified password does not meet SQL Server password policy requirements because it is not complex enough. The password must be at least 8 characters long and contain characters from three of the following four sets: uppercase letters, lowercase letters, numbers, and symbols.
+Enter the SQL Server system administrator password:
+Confirm the SQL Server system administrator password:
+Configuring SQL Server...
+
+/opt/mssql/bin/sqlservr: error while loading shared libraries: liblber-2.4.so.2: cannot open shared object file: No such file or directory
+Created symlink /etc/systemd/system/multi-user.target.wants/mssql-server.service → /usr/lib/systemd/system/mssql-server.service.
+Setup has completed successfully. SQL Server is now starting.
+[root@ms ~]#
+[root@ms ~]#
+[root@ms ~]# sudo dnf install -y compat-openldap
+Updating Subscription Management repositories.
+Last metadata expiration check: 0:10:44 ago on Thu 21 Aug 2025 09:28:42 PM IST.
+No match for argument: compat-openldap
+Error: Unable to find a match: compat-openldap
+[root@ms ~]#
+[root@ms ~]# ls -l /usr/lib64/liblber*
+lrwxrwxrwx. 1 root root    18 Feb 12  2025 /usr/lib64/liblber.so.2 -> liblber.so.2.0.200
+-rwxr-xr-x. 1 root root 70392 Feb 12  2025 /usr/lib64/liblber.so.2.0.200
+[root@ms ~]#
+[root@ms ~]# sudo ln -s /usr/lib64/liblber.so.2.0.200 /usr/lib64/liblber-2.4.so.2
+[root@ms ~]#
+[root@ms ~]# ls -l /usr/lib64/libldap*
+lrwxrwxrwx. 1 root root     20 Feb 12  2025 /usr/lib64/libldap_r.so.2 -> libldap_r.so.2.0.200
+-rwxr-xr-x. 1 root root 417728 Feb 12  2025 /usr/lib64/libldap_r.so.2.0.200
+lrwxrwxrwx. 1 root root     20 Feb 12  2025 /usr/lib64/libldap.so.2 -> libldap_r.so.2.0.200
+-rwxr-xr-x. 1 root root 417720 Feb 12  2025 /usr/lib64/libldap.so.2.0.200
+[root@ms ~]#
+[root@ms ~]# sudo dnf install -y compat-openldap
+Updating Subscription Management repositories.
+Red Hat Enterprise Linux 9 for x86_64 - AppStream (RPMs)                                                                               7.9 kB/s | 4.5 kB     00:00
+Red Hat Enterprise Linux 9 for x86_64 - BaseOS (RPMs)                                                                                  394  B/s | 4.1 kB     00:10
+No match for argument: compat-openldap
+Error: Unable to find a match: compat-openldap
+[root@ms ~]#
+[root@ms ~]# sudo systemctl enable mssql-server
+[root@ms ~]# sudo systemctl start mssql-server
+[root@ms ~]#
+[root@ms ~]# # Check status:
+[root@ms ~]# systemctl status mssql-server
+× mssql-server.service - Microsoft SQL Server Database Engine
+     Loaded: loaded (/usr/lib/systemd/system/mssql-server.service; enabled; preset: disabled)
+     Active: failed (Result: exit-code) since Thu 2025-08-21 21:44:44 IST; 26s ago
+   Duration: 5ms
+       Docs: https://docs.microsoft.com/en-us/sql/linux
+    Process: 52391 ExecStart=/opt/mssql/bin/sqlservr (code=exited, status=127)
+   Main PID: 52391 (code=exited, status=127)
+        CPU: 4ms
+
+Aug 21 21:44:44 ms.localdomain.com systemd[1]: mssql-server.service: Scheduled restart job, restart counter is at 3.
+Aug 21 21:44:44 ms.localdomain.com systemd[1]: Stopped Microsoft SQL Server Database Engine.
+Aug 21 21:44:44 ms.localdomain.com systemd[1]: mssql-server.service: Start request repeated too quickly.
+Aug 21 21:44:44 ms.localdomain.com systemd[1]: mssql-server.service: Failed with result 'exit-code'.
+Aug 21 21:44:44 ms.localdomain.com systemd[1]: Failed to start Microsoft SQL Server Database Engine.
+[root@ms ~]#
+[root@ms ~]# ldd /opt/mssql/bin/sqlservr | grep "not found"
+        libldap-2.4.so.2 => not found
+[root@ms ~]#
+[root@ms ~]# sudo ln -s /usr/lib64/libldap.so.2.0.200 /usr/lib64/libldap-2.4.so.2
+[root@ms ~]#
+[root@ms ~]# sudo dnf install -y compat-openssl11
+Updating Subscription Management repositories.
+Red Hat Enterprise Linux 9 for x86_64 - AppStream (RPMs)                                                                               841  B/s | 4.5 kB     00:05
+Red Hat Enterprise Linux 9 for x86_64 - BaseOS (RPMs)                                                                                  266  B/s | 4.1 kB     00:15
+Dependencies resolved.
+=======================================================================================================================================================================
+ Package                               Architecture                Version                                 Repository                                             Size
+=======================================================================================================================================================================
+Installing:
+ compat-openssl11                      x86_64                      1:1.1.1k-5.el9_6.1                      rhel-9-for-x86_64-appstream-rpms                      1.5 M
+
+Transaction Summary
+=======================================================================================================================================================================
+Install  1 Package
+
+Total download size: 1.5 M
+Installed size: 3.7 M
+Downloading Packages:
+compat-openssl11-1.1.1k-5.el9_6.1.x86_64.rpm                                                                                           249 kB/s | 1.5 MB     00:05
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total                                                                                                                                  249 kB/s | 1.5 MB     00:05
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                                                                                                               1/1
+  Installing       : compat-openssl11-1:1.1.1k-5.el9_6.1.x86_64                                                                                                    1/1
+  Running scriptlet: compat-openssl11-1:1.1.1k-5.el9_6.1.x86_64                                                                                                    1/1
+  Verifying        : compat-openssl11-1:1.1.1k-5.el9_6.1.x86_64                                                                                                    1/1
+Installed products updated.
+
+Installed:
+  compat-openssl11-1:1.1.1k-5.el9_6.1.x86_64
+
+Complete!
+[root@ms ~]#
+[root@ms ~]# ldd /opt/mssql/bin/sqlservr | grep "not found"
+[root@ms ~]#
+[root@ms ~]# # 4. Verify Service Status
+[root@ms ~]#
+[root@ms ~]# systemctl status mssql-server
+× mssql-server.service - Microsoft SQL Server Database Engine
+     Loaded: loaded (/usr/lib/systemd/system/mssql-server.service; enabled; preset: disabled)
+     Active: failed (Result: exit-code) since Thu 2025-08-21 21:44:44 IST; 2min 57s ago
+   Duration: 5ms
+       Docs: https://docs.microsoft.com/en-us/sql/linux
+    Process: 52391 ExecStart=/opt/mssql/bin/sqlservr (code=exited, status=127)
+   Main PID: 52391 (code=exited, status=127)
+        CPU: 4ms
+
+Aug 21 21:44:44 ms.localdomain.com systemd[1]: mssql-server.service: Scheduled restart job, restart counter is at 3.
+Aug 21 21:44:44 ms.localdomain.com systemd[1]: Stopped Microsoft SQL Server Database Engine.
+Aug 21 21:44:44 ms.localdomain.com systemd[1]: mssql-server.service: Start request repeated too quickly.
+Aug 21 21:44:44 ms.localdomain.com systemd[1]: mssql-server.service: Failed with result 'exit-code'.
+Aug 21 21:44:44 ms.localdomain.com systemd[1]: Failed to start Microsoft SQL Server Database Engine.
+[root@ms ~]#
+[root@ms ~]# sudo systemctl start mssql-server
+[root@ms ~]# systemctl status mssql-server
+● mssql-server.service - Microsoft SQL Server Database Engine
+     Loaded: loaded (/usr/lib/systemd/system/mssql-server.service; enabled; preset: disabled)
+     Active: active (running) since Thu 2025-08-21 21:47:47 IST; 2s ago
+       Docs: https://docs.microsoft.com/en-us/sql/linux
+   Main PID: 53542 (sqlservr)
+      Tasks: 6
+     Memory: 12.6M
+        CPU: 214ms
+     CGroup: /system.slice/mssql-server.service
+             ├─53542 /opt/mssql/bin/sqlservr
+             └─53553 /opt/mssql/bin/sqlservr
+
+Aug 21 21:47:47 ms.localdomain.com systemd[1]: Started Microsoft SQL Server Database Engine.
+[root@ms ~]#
+[root@ms ~]#
+[root@ms ~]# # 5. Install Client Tools (Optional, but very useful)
+[root@ms ~]#
+[root@ms ~]# To connect via terminal (sqlcmd):
+-bash: syntax error near unexpected token `('
+[root@ms ~]# # To connect via terminal (sqlcmd):
+[root@ms ~]#
+[root@ms ~]# sudo curl -o /etc/yum.repos.d/msprod.repo \
+https://packages.microsoft.com/config/rhel/8/prod.repo
+
+sudo dnf install -y mssql-tools unixODBC-devel
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   413  100   413    0     0   5294      0 --:--:-- --:--:-- --:--:--  5363
+Updating Subscription Management repositories.
+Microsoft Production                                                                                                                    47  B/s | 481  B     00:10
+Microsoft Production                                                                                                                    19 kB/s | 975  B     00:00
+Importing GPG key 0xBE1229CF:
+ Userid     : "Microsoft (Release signing) <gpgsecurity@microsoft.com>"
+ Fingerprint: BC52 8686 B50D 79E3 39D3 721C EB3E 94AD BE12 29CF
+ From       : https://packages.microsoft.com/keys/microsoft.asc
+Microsoft Production                                                                                                                   3.2 MB/s |  17 MB     00:05
+Last metadata expiration check: 0:00:08 ago on Thu 21 Aug 2025 09:49:11 PM IST.
+Dependencies resolved.
+=======================================================================================================================================================================
+ Package                                Architecture                   Version                               Repository                                           Size
+=======================================================================================================================================================================
+Installing:
+ mssql-tools                            x86_64                         17.10.1.1-1                           packages-microsoft-com-prod                         291 k
+ unixODBC-devel                         x86_64                         2.3.11-1.rh                           packages-microsoft-com-prod                          53 k
+Installing dependencies:
+ msodbcsql17                            x86_64                         17.10.6.1-1                           packages-microsoft-com-prod                         911 k
+ unixODBC                               x86_64                         2.3.11-1.rh                           packages-microsoft-com-prod                         274 k
+
+Transaction Summary
+=======================================================================================================================================================================
+Install  4 Packages
+
+Total download size: 1.5 M
+Installed size: 3.8 M
+Downloading Packages:
+(1/4): unixODBC-2.3.11-1.rh.x86_64.rpm                                                                                                 1.1 MB/s | 274 kB     00:00
+(2/4): mssql-tools-17.10.1.1-1.x86_64.rpm                                                                                              1.1 MB/s | 291 kB     00:00
+(3/4): unixODBC-devel-2.3.11-1.rh.x86_64.rpm                                                                                           421 kB/s |  53 kB     00:00
+(4/4): msodbcsql17-17.10.6.1-1.x86_64.rpm                                                                                              2.3 MB/s | 911 kB     00:00
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total                                                                                                                                  3.7 MB/s | 1.5 MB     00:00
+Microsoft Production                                                                                                                    16 kB/s | 975  B     00:00
+Importing GPG key 0xBE1229CF:
+ Userid     : "Microsoft (Release signing) <gpgsecurity@microsoft.com>"
+ Fingerprint: BC52 8686 B50D 79E3 39D3 721C EB3E 94AD BE12 29CF
+ From       : https://packages.microsoft.com/keys/microsoft.asc
+Key imported successfully
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                                                                                                               1/1
+  Installing       : unixODBC-2.3.11-1.rh.x86_64                                                                                                                   1/4
+  Running scriptlet: unixODBC-2.3.11-1.rh.x86_64                                                                                                                   1/4
+  Running scriptlet: msodbcsql17-17.10.6.1-1.x86_64                                                                                                                2/4
+The license terms for this product can be downloaded from
+https://aka.ms/odbc17eula and found in
+/usr/share/doc/msodbcsql17/LICENSE.txt . By entering 'YES',
+you indicate that you accept the license terms.
+
+Do you accept the license terms? (Enter YES or NO)
+Yes
+  Installing       : msodbcsql17-17.10.6.1-1.x86_64                                                                                                                2/4
+  Running scriptlet: msodbcsql17-17.10.6.1-1.x86_64                                                                                                                2/4
+odbcinst: Driver installed. Usage count increased to 1.
+    Target directory is /etc
+
+  Running scriptlet: mssql-tools-17.10.1.1-1.x86_64                                                                                                                3/4
+The license terms for this product can be downloaded from
+http://go.microsoft.com/fwlink/?LinkId=746949 and found in
+/usr/share/doc/mssql-tools/LICENSE.txt . By entering 'YES',
+you indicate that you accept the license terms.
+
+Do you accept the license terms? (Enter YES or NO)
+Yes
+  Installing       : mssql-tools-17.10.1.1-1.x86_64                                                                                                                3/4
+  Installing       : unixODBC-devel-2.3.11-1.rh.x86_64                                                                                                             4/4
+  Running scriptlet: msodbcsql17-17.10.6.1-1.x86_64                                                                                                                4/4
+  Running scriptlet: unixODBC-devel-2.3.11-1.rh.x86_64                                                                                                             4/4
+  Verifying        : msodbcsql17-17.10.6.1-1.x86_64                                                                                                                1/4
+  Verifying        : mssql-tools-17.10.1.1-1.x86_64                                                                                                                2/4
+  Verifying        : unixODBC-2.3.11-1.rh.x86_64                                                                                                                   3/4
+  Verifying        : unixODBC-devel-2.3.11-1.rh.x86_64                                                                                                             4/4
+Installed products updated.
+
+Installed:
+  msodbcsql17-17.10.6.1-1.x86_64           mssql-tools-17.10.1.1-1.x86_64           unixODBC-2.3.11-1.rh.x86_64           unixODBC-devel-2.3.11-1.rh.x86_64
+
+Complete!
+[root@ms ~]#
+[root@ms ~]# # Add to your PATH so sqlcmd works directly:
+[root@ms ~]#
+[root@ms ~]# echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile
+[root@ms ~]#
+[root@ms ~]# source ~/.bash_profile
+[root@ms ~]#
+[root@ms ~]# # 6. Test Connection
+[root@ms ~]#
+[root@ms ~]# sqlcmd -S localhost -U sa -P 'Server@123'
+Sqlcmd: Error: Microsoft ODBC Driver 17 for SQL Server : Login timeout expired.
+Sqlcmd: Error: Microsoft ODBC Driver 17 for SQL Server : TCP Provider: Error code 0x102.
+Sqlcmd: Error: Microsoft ODBC Driver 17 for SQL Server : A network-related or instance-specific error has occurred while establishing a connection to SQL Server. Server is not found or not accessible. Check if instance name is correct and if SQL Server is configured to allow remote connections. For more information see SQL Server Books Online..
+[root@ms ~]# systemctl status mssql-server
+× mssql-server.service - Microsoft SQL Server Database Engine
+     Loaded: loaded (/usr/lib/systemd/system/mssql-server.service; enabled; preset: disabled)
+     Active: failed (Result: exit-code) since Thu 2025-08-21 21:47:58 IST; 3min 1s ago
+   Duration: 260ms
+       Docs: https://docs.microsoft.com/en-us/sql/linux
+    Process: 53625 ExecStart=/opt/mssql/bin/sqlservr (code=exited, status=1/FAILURE)
+   Main PID: 53625 (code=exited, status=1/FAILURE)
+        CPU: 224ms
+
+Aug 21 21:47:58 ms.localdomain.com systemd[1]: mssql-server.service: Main process exited, code=exited, status=1/FAILURE
+Aug 21 21:47:58 ms.localdomain.com systemd[1]: mssql-server.service: Failed with result 'exit-code'.
+Aug 21 21:47:58 ms.localdomain.com systemd[1]: mssql-server.service: Scheduled restart job, restart counter is at 3.
+Aug 21 21:47:58 ms.localdomain.com systemd[1]: Stopped Microsoft SQL Server Database Engine.
+Aug 21 21:47:58 ms.localdomain.com systemd[1]: mssql-server.service: Start request repeated too quickly.
+Aug 21 21:47:58 ms.localdomain.com systemd[1]: mssql-server.service: Failed with result 'exit-code'.
+Aug 21 21:47:58 ms.localdomain.com systemd[1]: Failed to start Microsoft SQL Server Database Engine.
+[root@ms ~]#
+[root@ms ~]# sudo systemctl start mssql-server
+[root@ms ~]#
+[root@ms ~]# systemctl status mssql-server
+● mssql-server.service - Microsoft SQL Server Database Engine
+     Loaded: loaded (/usr/lib/systemd/system/mssql-server.service; enabled; preset: disabled)
+     Active: active (running) since Thu 2025-08-21 21:51:09 IST; 3s ago
+       Docs: https://docs.microsoft.com/en-us/sql/linux
+   Main PID: 55253 (sqlservr)
+      Tasks: 6
+     Memory: 12.0M
+        CPU: 217ms
+     CGroup: /system.slice/mssql-server.service
+             ├─55253 /opt/mssql/bin/sqlservr
+             └─55264 /opt/mssql/bin/sqlservr
+
+Aug 21 21:51:09 ms.localdomain.com systemd[1]: Started Microsoft SQL Server Database Engine.
+[root@ms ~]#
+[root@ms ~]# ps -ef | grep sqlservr
+mssql      55253       1  2 21:51 ?        00:00:00 /opt/mssql/bin/sqlservr
+mssql      55264   55253  0 21:51 ?        00:00:00 /opt/mssql/bin/sqlservr
+root       55337    6041  0 21:51 pts/1    00:00:00 grep --color=auto sqlservr
+[root@ms ~]#
+[root@ms ~]# # 1. Confirm SQL Server is running
+[root@ms ~]#
+[root@ms ~]# systemctl status mssql-server
+● mssql-server.service - Microsoft SQL Server Database Engine
+     Loaded: loaded (/usr/lib/systemd/system/mssql-server.service; enabled; preset: disabled)
+     Active: active (running) since Thu 2025-08-21 21:51:34 IST; 1s ago
+       Docs: https://docs.microsoft.com/en-us/sql/linux
+   Main PID: 55431 (sqlservr)
+      Tasks: 6
+     Memory: 13.8M
+        CPU: 219ms
+     CGroup: /system.slice/mssql-server.service
+             ├─55431 /opt/mssql/bin/sqlservr
+             └─55442 /opt/mssql/bin/sqlservr
+
+Aug 21 21:51:34 ms.localdomain.com systemd[1]: Started Microsoft SQL Server Database Engine.
+[root@ms ~]#
+[root@ms ~]# ps -ef | grep sqlservr
+mssql      55431       1  5 21:51 ?        00:00:00 /opt/mssql/bin/sqlservr
+mssql      55442   55431  0 21:51 ?        00:00:00 /opt/mssql/bin/sqlservr
+root       55477    6041  0 21:51 pts/1    00:00:00 grep --color=auto sqlservr
+[root@ms ~]#
+[root@ms ~]# #v2. Verify SQL Server is listening on TCP 1433
+[root@ms ~]#
+[root@ms ~]# # 2. Verify SQL Server is listening on TCP 1433
+[root@ms ~]#
+[root@ms ~]# ss -tulpn | grep 1433
+[root@ms ~]#
+[root@ms ~]# # 3. Check the error log for startup problems
+[root@ms ~]#
+[root@ms ~]# /var/opt/mssql/log/errorlog
+-bash: /var/opt/mssql/log/errorlog: No such file or directory
+[root@ms ~]#
+[root@ms ~]# tail -50 /var/opt/mssql/log/errorlog
+tail: cannot open '/var/opt/mssql/log/errorlog' for reading: No such file or directory
+[root@ms ~]#
+[root@ms ~]# /opt/mssql/bin/mssql-conf setup
+Choose an edition of SQL Server:
+  1) Evaluation (free, no production use rights, 180-day limit)
+  2) Developer (free, no production use rights)
+  3) Express (free)
+  4) Web (PAID)
+  5) Standard (PAID)
+  6) Enterprise (PAID) - CPU Core utilization restricted to 20 physical/40 hyperthreaded
+  7) Enterprise Core (PAID) - CPU Core utilization up to Operating System Maximum
+  8) I bought a license through a retail sales channel and have a product key to enter.
+
+Details about editions can be found at
+https://go.microsoft.com/fwlink/?LinkId=2109348&clcid=0x409
+
+Use of PAID editions of this software requires separate licensing through a
+Microsoft Volume Licensing program.
+By choosing a PAID edition, you are verifying that you have the appropriate
+number of licenses in place to install and run this software.
+
+Enter your edition(1-8): 1
+The license terms for this product can be found in
+/usr/share/doc/mssql-server or downloaded from:
+https://go.microsoft.com/fwlink/?LinkId=2104078&clcid=0x409
+
+The privacy statement can be viewed at:
+https://go.microsoft.com/fwlink/?LinkId=853010&clcid=0x409
+
+Enter the SQL Server system administrator password: Traceback (most recent call last):
+  File "/opt/mssql/bin/../lib/mssql-conf/mssql-conf.py", line 598, in <module>
+    main()
+  File "/opt/mssql/bin/../lib/mssql-conf/mssql-conf.py", line 594, in main
+    processCommands()
+  File "/opt/mssql/bin/../lib/mssql-conf/mssql-conf.py", line 310, in processCommands
+    COMMAND_TABLE[args.which]()
+  File "/opt/mssql/bin/../lib/mssql-conf/mssql-conf.py", line 93, in handleSetup
+    mssqlconfhelper.setupSqlServer(eulaAccepted, noprompt=args.noprompt)
+  File "/opt/mssql/lib/mssql-conf/mssqlconfhelper.py", line 995, in setupSqlServer
+    encodedPassword = getSystemAdministratorPassword(noprompt)
+  File "/opt/mssql/lib/mssql-conf/mssqlconfhelper.py", line 743, in getSystemAdministratorPassword
+    return getSystemAdministratorPasswordInteractive()
+  File "/opt/mssql/lib/mssql-conf/mssqlconfhelper.py", line 758, in getSystemAdministratorPasswordInteractive
+    saPassword = getpass.getpass(_("Enter the SQL Server system administrator password: "))
+  File "/usr/lib64/python3.9/getpass.py", line 77, in unix_getpass
+    passwd = _raw_input(prompt, stream, input=input)
+  File "/usr/lib64/python3.9/getpass.py", line 146, in _raw_input
+    line = input.readline()
+KeyboardInterrupt
+
+[root@ms ~]# /opt/mssql/bin/mssql-conf setup
+Choose an edition of SQL Server:
+  1) Evaluation (free, no production use rights, 180-day limit)
+  2) Developer (free, no production use rights)
+  3) Express (free)
+  4) Web (PAID)
+  5) Standard (PAID)
+  6) Enterprise (PAID) - CPU Core utilization restricted to 20 physical/40 hyperthreaded
+  7) Enterprise Core (PAID) - CPU Core utilization up to Operating System Maximum
+  8) I bought a license through a retail sales channel and have a product key to enter.
+
+Details about editions can be found at
+https://go.microsoft.com/fwlink/?LinkId=2109348&clcid=0x409
+
+Use of PAID editions of this software requires separate licensing through a
+Microsoft Volume Licensing program.
+By choosing a PAID edition, you are verifying that you have the appropriate
+number of licenses in place to install and run this software.
+
+Enter your edition(1-8): 3
+The license terms for this product can be found in
+/usr/share/doc/mssql-server or downloaded from:
+https://go.microsoft.com/fwlink/?LinkId=2104294&clcid=0x409
+
+The privacy statement can be viewed at:
+https://go.microsoft.com/fwlink/?LinkId=853010&clcid=0x409
+
+Enter the SQL Server system administrator password: Traceback (most recent call last):
+  File "/opt/mssql/bin/../lib/mssql-conf/mssql-conf.py", line 598, in <module>
+    main()
+  File "/opt/mssql/bin/../lib/mssql-conf/mssql-conf.py", line 594, in main
+    processCommands()
+  File "/opt/mssql/bin/../lib/mssql-conf/mssql-conf.py", line 310, in processCommands
+    COMMAND_TABLE[args.which]()
+  File "/opt/mssql/bin/../lib/mssql-conf/mssql-conf.py", line 93, in handleSetup
+    mssqlconfhelper.setupSqlServer(eulaAccepted, noprompt=args.noprompt)
+  File "/opt/mssql/lib/mssql-conf/mssqlconfhelper.py", line 995, in setupSqlServer
+    encodedPassword = getSystemAdministratorPassword(noprompt)
+  File "/opt/mssql/lib/mssql-conf/mssqlconfhelper.py", line 743, in getSystemAdministratorPassword
+    return getSystemAdministratorPasswordInteractive()
+  File "/opt/mssql/lib/mssql-conf/mssqlconfhelper.py", line 758, in getSystemAdministratorPasswordInteractive
+    saPassword = getpass.getpass(_("Enter the SQL Server system administrator password: "))
+  File "/usr/lib64/python3.9/getpass.py", line 77, in unix_getpass
+    passwd = _raw_input(prompt, stream, input=input)
+  File "/usr/lib64/python3.9/getpass.py", line 146, in _raw_input
+    line = input.readline()
+KeyboardInterrupt
+
+[root@ms ~]#
+[root@ms ~]# /opt/mssql/bin/mssql-conf setup
+Choose an edition of SQL Server:
+  1) Evaluation (free, no production use rights, 180-day limit)
+  2) Developer (free, no production use rights)
+  3) Express (free)
+  4) Web (PAID)
+  5) Standard (PAID)
+  6) Enterprise (PAID) - CPU Core utilization restricted to 20 physical/40 hyperthreaded
+  7) Enterprise Core (PAID) - CPU Core utilization up to Operating System Maximum
+  8) I bought a license through a retail sales channel and have a product key to enter.
+
+Details about editions can be found at
+https://go.microsoft.com/fwlink/?LinkId=2109348&clcid=0x409
+
+Use of PAID editions of this software requires separate licensing through a
+Microsoft Volume Licensing program.
+By choosing a PAID edition, you are verifying that you have the appropriate
+number of licenses in place to install and run this software.
+
+Enter your edition(1-8): 3
+The license terms for this product can be found in
+/usr/share/doc/mssql-server or downloaded from:
+https://go.microsoft.com/fwlink/?LinkId=2104294&clcid=0x409
+
+The privacy statement can be viewed at:
+https://go.microsoft.com/fwlink/?LinkId=853010&clcid=0x409
+
+Enter the SQL Server system administrator password:
+Confirm the SQL Server system administrator password:
+Configuring SQL Server...
+
+/opt/mssql/bin/sqlservr: Unable to start the process, with error 101.
+
+Initial setup of Microsoft SQL Server failed. Please consult the ERRORLOG
+in /var/opt/mssql/log for more information.
+[root@ms ~]#
+[root@ms ~]# systemctl status mssql-server
+× mssql-server.service - Microsoft SQL Server Database Engine
+     Loaded: loaded (/usr/lib/systemd/system/mssql-server.service; enabled; preset: disabled)
+     Active: failed (Result: exit-code) since Thu 2025-08-21 21:51:40 IST; 1min 49s ago
+   Duration: 5.276s
+       Docs: https://docs.microsoft.com/en-us/sql/linux
+    Process: 55431 ExecStart=/opt/mssql/bin/sqlservr (code=exited, status=1/FAILURE)
+   Main PID: 55431 (code=exited, status=1/FAILURE)
+        CPU: 228ms
+
+Aug 21 21:51:40 ms.localdomain.com systemd[1]: mssql-server.service: Scheduled restart job, restart counter is at 3.
+Aug 21 21:51:40 ms.localdomain.com systemd[1]: Stopped Microsoft SQL Server Database Engine.
+Aug 21 21:51:40 ms.localdomain.com systemd[1]: mssql-server.service: Start request repeated too quickly.
+Aug 21 21:51:40 ms.localdomain.com systemd[1]: mssql-server.service: Failed with result 'exit-code'.
+Aug 21 21:51:40 ms.localdomain.com systemd[1]: Failed to start Microsoft SQL Server Database Engine.
+[root@ms ~]#
+[root@ms ~]# systemctl status mssql-server
+× mssql-server.service - Microsoft SQL Server Database Engine
+     Loaded: loaded (/usr/lib/systemd/system/mssql-server.service; enabled; preset: disabled)
+     Active: failed (Result: exit-code) since Thu 2025-08-21 21:51:40 IST; 1min 54s ago
+   Duration: 5.276s
+       Docs: https://docs.microsoft.com/en-us/sql/linux
+    Process: 55431 ExecStart=/opt/mssql/bin/sqlservr (code=exited, status=1/FAILURE)
+   Main PID: 55431 (code=exited, status=1/FAILURE)
+        CPU: 228ms
+
+Aug 21 21:51:40 ms.localdomain.com systemd[1]: mssql-server.service: Scheduled restart job, restart counter is at 3.
+Aug 21 21:51:40 ms.localdomain.com systemd[1]: Stopped Microsoft SQL Server Database Engine.
+Aug 21 21:51:40 ms.localdomain.com systemd[1]: mssql-server.service: Start request repeated too quickly.
+Aug 21 21:51:40 ms.localdomain.com systemd[1]: mssql-server.service: Failed with result 'exit-code'.
+Aug 21 21:51:40 ms.localdomain.com systemd[1]: Failed to start Microsoft SQL Server Database Engine.
+[root@ms ~]# firewall-cmd --list-all
+public (active)
+  target: default
+  icmp-block-inversion: no
+  interfaces: enp0s3
+  sources:
+  services: cockpit dhcpv6-client ssh
+  ports:
+  protocols:
+  forward: yes
+  masquerade: no
+  forward-ports:
+  source-ports:
+  icmp-blocks:
+  rich rules:
+[root@ms ~]#
+[root@ms ~]# firewall-cmd --add-port=1433/tcp --permanent
+success
+[root@ms ~]#
+[root@ms ~]# firewall-cmd --reload
+success
+[root@ms ~]#
+[root@ms ~]# sudo systemctl start mssql-server
+[root@ms ~]# systemctl status mssql-server
+● mssql-server.service - Microsoft SQL Server Database Engine
+     Loaded: loaded (/usr/lib/systemd/system/mssql-server.service; enabled; preset: disabled)
+     Active: active (running) since Thu 2025-08-21 21:54:12 IST; 2s ago
+       Docs: https://docs.microsoft.com/en-us/sql/linux
+   Main PID: 56482 (sqlservr)
+      Tasks: 6
+     Memory: 15.1M
+        CPU: 227ms
+     CGroup: /system.slice/mssql-server.service
+             ├─56482 /opt/mssql/bin/sqlservr
+             └─56484 /opt/mssql/bin/sqlservr
+
+Aug 21 21:54:12 ms.localdomain.com systemd[1]: Started Microsoft SQL Server Database Engine.
+[root@ms ~]#
+[root@ms ~]# ss -tulpn | grep 1433
+[root@ms ~]#
+[root@ms ~]# ps -ef | grep sqlservr
+root       56616    6041  0 21:54 pts/1    00:00:00 grep --color=auto sqlservr
+[root@ms ~]#
+[root@ms ~]# sudo systemctl start mssql-server
+Job for mssql-server.service failed because the control process exited with error code.
+See "systemctl status mssql-server.service" and "journalctl -xeu mssql-server.service" for details.
+[root@ms ~]#
+[root@ms ~]# systemctl status mssql-server
+× mssql-server.service - Microsoft SQL Server Database Engine
+     Loaded: loaded (/usr/lib/systemd/system/mssql-server.service; enabled; preset: disabled)
+     Active: failed (Result: exit-code) since Thu 2025-08-21 21:54:24 IST; 13s ago
+   Duration: 256ms
+       Docs: https://docs.microsoft.com/en-us/sql/linux
+    Process: 56580 ExecStart=/opt/mssql/bin/sqlservr (code=exited, status=1/FAILURE)
+   Main PID: 56580 (code=exited, status=1/FAILURE)
+        CPU: 220ms
+
+Aug 21 21:54:23 ms.localdomain.com systemd[1]: mssql-server.service: Main process exited, code=exited, status=1/FAILURE
+Aug 21 21:54:23 ms.localdomain.com systemd[1]: mssql-server.service: Failed with result 'exit-code'.
+Aug 21 21:54:24 ms.localdomain.com systemd[1]: mssql-server.service: Scheduled restart job, restart counter is at 3.
+Aug 21 21:54:24 ms.localdomain.com systemd[1]: Stopped Microsoft SQL Server Database Engine.
+Aug 21 21:54:24 ms.localdomain.com systemd[1]: mssql-server.service: Start request repeated too quickly.
+Aug 21 21:54:24 ms.localdomain.com systemd[1]: mssql-server.service: Failed with result 'exit-code'.
+Aug 21 21:54:24 ms.localdomain.com systemd[1]: Failed to start Microsoft SQL Server Database Engine.
+Aug 21 21:54:30 ms.localdomain.com systemd[1]: mssql-server.service: Start request repeated too quickly.
+Aug 21 21:54:30 ms.localdomain.com systemd[1]: mssql-server.service: Failed with result 'exit-code'.
+Aug 21 21:54:30 ms.localdomain.com systemd[1]: Failed to start Microsoft SQL Server Database Engine.
+[root@ms ~]#
+[root@ms ~]# sudo systemctl start mssql-server
+Job for mssql-server.service failed because the control process exited with error code.
+See "systemctl status mssql-server.service" and "journalctl -xeu mssql-server.service" for details.
+[root@ms ~]#
