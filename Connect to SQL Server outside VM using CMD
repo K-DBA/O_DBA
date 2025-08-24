@@ -1,0 +1,17 @@
+sqlcmd -S 192.168.0.136 -U sa -P "Sqlserver@123" -C -N
+
+C:\Users\Admin>sqlcmd -S 192.168.0.136 -U sa -P "Sqlserver@123" -C -N
+1> select name from sys.databases;
+2> go
+name                                                                                                                    
+--------------------------------------------------------------------------------------------------------------------------------
+master                                                                                                                  
+tempdb                                                                                                                  
+model                                                                                                                   
+msdb                                                                                                                    
+
+(4 rows affected)
+1> /q
+2> exit
+
+C:\Users\Admin>
