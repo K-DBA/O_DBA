@@ -1,0 +1,37 @@
+Step 1: Enable SELinux Enforcing Mode on RHEL 
+sestatus
+getenforce
+sudo dnf install ca-certificates -y
+sudo update-ca-trust
+curl https://google.com
+
+Step 2: Install SQL Server on RHEL
+sudo curl -o /etc/yum.repos.d/mssql-server.repo https://packages.microsoft.com/config/rhel/$(rpm -E %{rhel})/mssql-server-2022.repo
+sudo yum install -y mssql-server
+sudo yum install -y mssql-server-selinux
+Choose an edition of SQL Server:
+  1) Evaluation (free, no production use rights, 180-day limit)
+
+Choose 1:- Evaluation
+password: Sqlserver@123
+
+sudo systemctl status mssql-server 
+
+sudo systemctl start mssql-server (if not started)
+
+sudo firewall-cmd --zone=public --add-port=1433/tcp --permanent
+sudo firewall-cmd --reload
+
+Step 3: Install SQL Server Command-line tools 
+
+curl https://packages.microsoft.com/config/rhel/9/prod.repo | sudo tee /etc/yum.repos.d/mssql-release.repo
+sudo yum install -y mssql-tools18 unixODBC-devel
+sudo yum check-update
+sudo yum update mssql-tools18
+echo 'export PATH="$PATH:/opt/mssql-tools18/bin"' >> ~/.bash_profile
+source ~/.bash_profile
+echo 'export PATH="$PATH:/opt/mssql-tools18/bin"' >> ~/.bashrc
+source ~/.bash_profile
+cat ~/.bash_profile
+
+
