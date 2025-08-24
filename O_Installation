@@ -1,0 +1,103 @@
+cat /etc/hosts
+192.168.67.145   oraclelab1.localdomain.com      oraclelab1
+192.168.67.185   oraclelab2.localdomain.com      oraclelab2
+
+sudo hostnamectl set-hostname
+
+yum list oracle*
+yum install -y oracle-database-preinstall-19c.x86_64 --skip-broken
+
+sudo dnf install -y yum-utils
+
+curl -o oracle-database-preinstall-19c-1.0-1.el9.x86_64.rpm https://yum.oracle.com/repo/OracleLinux/OL9/appstream/x86_64/getPackage/oracle-database-preinstall-19c-1.0-1.el9.x86_64.rpm
+dnf -y install oracle-database-preinstall-19c-1.0-1.el9.x86_64.rpm
+dnf -y install lib* --skip-broken
+dnf -y install binutils gcc make glibc-devel -y
+
+wget https://yum.oracle.com/repo/OracleLinux/OL7/latest/x86_64/getPackage/compat-libstdc++-33-3.2.3-72.el7.x86_64.rpm
+rpm -ivh compat-libstdc++-33-3.2.3-72.el7.x86_64.rpm
+curl -o oracle-database-preinstall-19c-1.0-1.el7.x86_64.rpm https://yum.oracle.com/repo/OracleLinux/OL7/latest/x86_64/getPackage/oracle-database-preinstall-19c-1.0-1.el7.x86_64.rpm
+yum install -y oracle-database-preinstall-19c-1.0-1.el7.x86_64.rpm
+yum -y install gcc-c++
+sudo yum install libnsl
+
+
+sudo subscription-manager repos --enable codeready-builder-for-rhel-7-$(arch)-rpms
+sudo subscription-manager repos --enable rhel-7-for-$(arch)-baseos-rpms
+sudo subscription-manager repos --enable rhel-7-for-$(arch)-baseos-rpms
+
+subscription-manager register
+kedarab2
+iZF5Cdn6tdQJvZ!
+
+subscription-manager clean
+
+
+passwd oracle
+mkdir -p /oradbhome/dbhome_1
+mkdir -p /oradbhome/app/oraInventory
+
+chown -R oracle:oinstall /oradbhome
+chmod -R 777 /oradbhome
+
+systemctl stop firewalld.service
+systemctl disable firewalld.service
+systemctl status firewalld.service
+sudo setenforce 0  # SELinux
+sudo systemctl stop apparmor  # AppArmor
+
+unzip -q V982063-01-001.zip
+
+sudo yum install xorg-x11*
+systemctl restart sshd
+service sshd restart
+after these above three commands take a new session of the same server and then run ./runInstaller
+
+ssh -X oracle@192.168.186.217
+export CV_ASSUME_DISTID=OEL7.8
+export CV_ASSUME_DISTID=RHEL7
+export ORACLE_SID=TESTDB
+export ORACLE_BASE=/oradbhome
+export ORACLE_HOME=/oradbhome/dbhome_1
+export PATH=$ORACLE_HOME/OPatch:$PATH
+export LD_LIBRARY_PATH=$ORACLE_HOME/lib:/lib:/usr/lib/
+
+
+Profile & User Creation
+
+select username, account_status, default_tablespace from dba_users;
+select PROPERTY_NAME, PROPERTY_VALUE from database_properties where PROPERTY_NAME like '%DEFAULT%';
+
+
+
+ssh -X oracle@192.168.186.201
+export CV_ASSUME_DISTID=OL8
+export CV_ASSUME_DISTID=OEL7.8
+export ORACLE_SID=TESTDB
+export ORACLE_BASE=/oradbhome
+export ORACLE_HOME=/oradbhome/dbhome_1
+export LD_LIBRARY_PATH=/oradbhome/dbhome_1/lib:$LD_LIBRARY_PATH
+
+
+./runInstaller -applyRU /oradbhome/dbhome_1/patches/36916690
+
+cd database
+./runInstaller -applyRU /patches/RU1925/36912597 \
+  -silent \
+  -responseFile ./install/response/db_install.rsp \
+  oracle.install.option=INSTALL_DB_SWONLY \
+  UNIX_GROUP_NAME=oinstall \
+  INVENTORY_LOCATION=/oradbhome/oraInventory \
+  ORACLE_HOME=/oradbhome/dbhome_1 \
+  ORACLE_BASE=/oradbhome \
+  oracle.install.db.InstallEdition=EE \
+  oracle.install.db.OSDBA_GROUP=oinstall \
+  DECLINE_SECURITY_UPDATES=true
+  
+systemctl restart sshd
+service sshd restart
+export ORACLE_HOME=/u01/app/grid/19c/grid_home
+export PATH=$ORACLE_HOME/OPatch:$PATH
+export PATH=$ORACLE_HOME/bin:$PATH
+export CV_ASSUME_DISTID=OL8
+./gridSetup.sh -applyRU /u01/app/grid/19c/grid_home/36916690
