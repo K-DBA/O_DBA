@@ -34,4 +34,7 @@ echo 'export PATH="$PATH:/opt/mssql-tools18/bin"' >> ~/.bashrc
 source ~/.bash_profile
 cat ~/.bash_profile
 
+ # Step 4: Connect to SQL Server on RHEL
+sqlcmd -S localhost -U sa -P 'Sqlserver@123' -N -C
+select Name from sys.databases;GO
 
