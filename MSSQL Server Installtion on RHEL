@@ -1,0 +1,675 @@
+login as: root
+    ┌──────────────────────────────────────────────────────────────────────┐
+    │                 • MobaXterm Personal Edition v23.6 •                 │
+    │               (SSH client, X server and network tools)               │
+    │                                                                      │
+    │ ⮞ SSH session to root@192.168.0.136                                  │
+    │   • Direct SSH      :  ✓                                             │
+    │   • SSH compression :  ✓                                             │
+    │   • SSH-browser     :  ✓                                             │
+    │   • X11-forwarding  :  ✓  (remote display is forwarded through SSH)  │
+    │                                                                      │
+    │ ⮞ For more info, ctrl+click on help or visit our website.            │
+    └──────────────────────────────────────────────────────────────────────┘
+
+Activate the web console with: systemctl enable --now cockpit.socket
+
+Register this system with Red Hat Insights: rhc connect
+
+Example:
+# rhc connect --activation-key <key> --organization <org>
+
+The rhc client and Red Hat Insights will enable analytics and additional
+management capabilities on your system.
+View your connected systems at https://console.redhat.com/insights
+
+You can learn more about how to register your system
+using rhc at https://red.ht/registration
+Last login: Sun Aug 24 12:15:42 2025
+[root@ms ~]# df -h
+Filesystem             Size  Used Avail Use% Mounted on
+devtmpfs               4.0M     0  4.0M   0% /dev
+tmpfs                  3.9G     0  3.9G   0% /dev/shm
+tmpfs                  1.6G  9.2M  1.6G   1% /run
+/dev/mapper/rhel-root   22G  6.2G   16G  29% /
+/dev/sda1              960M  365M  596M  38% /boot
+tmpfs                  798M   96K  798M   1% /run/user/0
+[root@ms ~]#
+[root@ms ~]# sestatus
+SELinux status:                 enabled
+SELinuxfs mount:                /sys/fs/selinux
+SELinux root directory:         /etc/selinux
+Loaded policy name:             targeted
+Current mode:                   enforcing
+Mode from config file:          enforcing
+Policy MLS status:              enabled
+Policy deny_unknown status:     allowed
+Memory protection checking:     actual (secure)
+Max kernel policy version:      33
+[root@ms ~]#
+[root@ms ~]#
+[root@ms ~]# getenforce
+Enforcing
+[root@ms ~]#
+[root@ms ~]# sudo curl -o /etc/yum.repos.d/mssql-server.repo https://packages.microsoft.com/config/rhel/$(rpm -E %{rhel})/mssql-server-2022.repo
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+curl: (60) SSL certificate problem: self-signed certificate
+More details here: https://curl.se/docs/sslcerts.html
+
+curl failed to verify the legitimacy of the server and therefore could not
+establish a secure connection to it. To learn more about this situation and
+how to fix it, please visit the web page mentioned above.
+[root@ms ~]#
+[root@ms ~]# hostnamectl
+ Static hostname: ms.localdomain.com
+       Icon name: computer-vm
+         Chassis: vm 🖴
+      Machine ID: c6d155db4f154519b880d59e868f5387
+         Boot ID: 709728f901034b538817563313e11fdf
+  Virtualization: oracle
+Operating System: Red Hat Enterprise Linux 9.6 (Plow)
+     CPE OS Name: cpe:/o:redhat:enterprise_linux:9::baseos
+          Kernel: Linux 5.14.0-570.12.1.el9_6.x86_64
+    Architecture: x86-64
+ Hardware Vendor: innotek GmbH
+  Hardware Model: VirtualBox
+Firmware Version: VirtualBox
+[root@ms ~]#
+[root@ms ~]# sudo dnf install ca-certificates -y
+Updating Subscription Management repositories.
+Microsoft Production                                                                                                                    82  B/s | 481  B     00:05
+Microsoft Production                                                                                                                   1.5 MB/s |  17 MB     00:11
+Microsoft SQL Server 2019                                                                                                               41  B/s | 481  B     00:11
+Red Hat Enterprise Linux 9 for x86_64 - AppStream (RPMs)                                                                                13 kB/s | 4.5 kB     00:00
+Red Hat Enterprise Linux 9 for x86_64 - AppStream (RPMs)                                                                                17 MB/s |  66 MB     00:03
+Red Hat Enterprise Linux 9 for x86_64 - BaseOS (RPMs)                                                                                   12 kB/s | 4.1 kB     00:00
+Red Hat Enterprise Linux 9 for x86_64 - BaseOS (RPMs)                                                                                  8.2 MB/s |  72 MB     00:08
+Package ca-certificates-2024.2.69_v8.0.303-91.4.el9_4.noarch is already installed.
+Dependencies resolved.
+Nothing to do.
+Complete!
+[root@ms ~]#
+[root@ms ~]# sudo update-ca-trust
+[root@ms ~]#
+[root@ms ~]# sudo curl -o /etc/yum.repos.d/mssql-server.repo \
+https://packages.microsoft.com/config/rhel/9/mssql-server-2022.repo
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:--  0:00:04 --:--:--     0curl: (7) Couldn't connect to server
+[root@ms ~]#
+[root@ms ~]# curl https://google.com
+<HTML><HEAD><meta http-equiv="content-type" content="text/html;charset=utf-8">
+<TITLE>301 Moved</TITLE></HEAD><BODY>
+<H1>301 Moved</H1>
+The document has moved
+<A HREF="https://www.google.com/">here</A>.
+</BODY></HTML>
+[root@ms ~]#
+[root@ms ~]# sudo curl -o /etc/yum.repos.d/mssql-server.repo https://packages.microsoft.com/config/rhel/$(rpm -E %{rhel})/mssql-server-2022.repo
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   444  100   444    0     0   1096      0 --:--:-- --:--:-- --:--:--  1093
+[root@ms ~]#
+[root@ms ~]# sudo yum install -y msqql-server
+Updating Subscription Management repositories.
+Microsoft SQL Server 2022                                                                                                              2.8 kB/s | 481  B     00:00
+Microsoft SQL Server 2022                                                                                                               19 kB/s | 975  B     00:00
+Importing GPG key 0xBE1229CF:
+ Userid     : "Microsoft (Release signing) <gpgsecurity@microsoft.com>"
+ Fingerprint: BC52 8686 B50D 79E3 39D3 721C EB3E 94AD BE12 29CF
+ From       : https://packages.microsoft.com/keys/microsoft.asc
+Microsoft SQL Server 2022                                                                                                              143 kB/s |  25 kB     00:00
+No match for argument: msqql-server
+Error: Unable to find a match: msqql-server
+[root@ms ~]#
+[root@ms ~]# sudo yum install -y mssql-server
+Updating Subscription Management repositories.
+Last metadata expiration check: 0:00:14 ago on Sun 24 Aug 2025 12:34:39 PM IST.
+Package mssql-server-15.0.4440.1-1.x86_64 is already installed.
+Dependencies resolved.
+=======================================================================================================================================================================
+ Package                           Architecture                Version                             Repository                                                     Size
+=======================================================================================================================================================================
+Upgrading:
+ mssql-server                      x86_64                      16.0.4210.1-1                       packages-microsoft-com-mssql-server-2022                      265 M
+
+Transaction Summary
+=======================================================================================================================================================================
+Upgrade  1 Package
+
+Total download size: 265 M
+Downloading Packages:
+mssql-server-16.0.4210.1-1.x86_64.rpm                                                                                                  5.8 MB/s | 265 MB     00:45
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total                                                                                                                                  5.8 MB/s | 265 MB     00:46
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                                                                                                               1/1
+  Running scriptlet: mssql-server-16.0.4210.1-1.x86_64                                                                                                             1/2
+  Upgrading        : mssql-server-16.0.4210.1-1.x86_64                                                                                                             1/2
+  Running scriptlet: mssql-server-16.0.4210.1-1.x86_64                                                                                                             1/2
+
++--------------------------------------------------------------+
+Please run 'sudo /opt/mssql/bin/mssql-conf setup'
+to complete the setup of Microsoft SQL Server
++--------------------------------------------------------------+
+
+
+  Cleanup          : mssql-server-15.0.4440.1-1.x86_64                                                                                                             2/2
+  Running scriptlet: mssql-server-15.0.4440.1-1.x86_64                                                                                                             2/2
+  Verifying        : mssql-server-16.0.4210.1-1.x86_64                                                                                                             1/2
+  Verifying        : mssql-server-15.0.4440.1-1.x86_64                                                                                                             2/2
+Installed products updated.
+
+Upgraded:
+  mssql-server-16.0.4210.1-1.x86_64
+
+Complete!
+[root@ms ~]#
+[root@ms ~]# sudo yum install -y mssql-server-selinux
+Updating Subscription Management repositories.
+Last metadata expiration check: 0:02:06 ago on Sun 24 Aug 2025 12:36:19 PM IST.
+Dependencies resolved.
+=======================================================================================================================================================================
+ Package                                   Architecture             Version                           Repository                                                  Size
+=======================================================================================================================================================================
+Installing:
+ mssql-server-selinux                      x86_64                   16.0.4210.1-1                     packages-microsoft-com-mssql-server-2022                    29 k
+Upgrading:
+ selinux-policy                            noarch                   38.1.53-5.el9_6                   rhel-9-for-x86_64-baseos-rpms                               45 k
+ selinux-policy-targeted                   noarch                   38.1.53-5.el9_6                   rhel-9-for-x86_64-baseos-rpms                              6.9 M
+
+Transaction Summary
+=======================================================================================================================================================================
+Install  1 Package
+Upgrade  2 Packages
+
+Total download size: 7.0 M
+Downloading Packages:
+(1/3): selinux-policy-38.1.53-5.el9_6.noarch.rpm                                                                                       122 kB/s |  45 kB     00:00
+(2/3): selinux-policy-targeted-38.1.53-5.el9_6.noarch.rpm                                                                              4.6 MB/s | 6.9 MB     00:01
+(3/3): mssql-server-selinux-16.0.4210.1-1.x86_64.rpm                                                                                   5.4 kB/s |  29 kB     00:05
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total                                                                                                                                  1.3 MB/s | 7.0 MB     00:05
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Running scriptlet: selinux-policy-targeted-38.1.53-5.el9_6.noarch                                                                                                1/1
+  Preparing        :                                                                                                                                               1/1
+  Upgrading        : selinux-policy-38.1.53-5.el9_6.noarch                                                                                                         1/5
+  Running scriptlet: selinux-policy-38.1.53-5.el9_6.noarch                                                                                                         1/5
+  Running scriptlet: selinux-policy-targeted-38.1.53-5.el9_6.noarch                                                                                                2/5
+  Upgrading        : selinux-policy-targeted-38.1.53-5.el9_6.noarch                                                                                                2/5
+  Running scriptlet: selinux-policy-targeted-38.1.53-5.el9_6.noarch                                                                                                2/5
+  Running scriptlet: mssql-server-selinux-16.0.4210.1-1.x86_64                                                                                                     3/5
+  Installing       : mssql-server-selinux-16.0.4210.1-1.x86_64                                                                                                     3/5
+  Running scriptlet: mssql-server-selinux-16.0.4210.1-1.x86_64                                                                                                     3/5
+grep: /var/lib/selinux/targeted/rpmbooleans.custom: No such file or directory
+
+  Running scriptlet: selinux-policy-38.1.53-2.el9.noarch                                                                                                           4/5
+  Cleanup          : selinux-policy-38.1.53-2.el9.noarch                                                                                                           4/5
+  Running scriptlet: selinux-policy-38.1.53-2.el9.noarch                                                                                                           4/5
+  Cleanup          : selinux-policy-targeted-38.1.53-2.el9.noarch                                                                                                  5/5
+  Running scriptlet: selinux-policy-targeted-38.1.53-2.el9.noarch                                                                                                  5/5
+  Running scriptlet: selinux-policy-targeted-38.1.53-5.el9_6.noarch                                                                                                5/5
+  Running scriptlet: mssql-server-selinux-16.0.4210.1-1.x86_64                                                                                                     5/5
+  Running scriptlet: selinux-policy-targeted-38.1.53-2.el9.noarch                                                                                                  5/5
+  Verifying        : mssql-server-selinux-16.0.4210.1-1.x86_64                                                                                                     1/5
+  Verifying        : selinux-policy-38.1.53-5.el9_6.noarch                                                                                                         2/5
+  Verifying        : selinux-policy-38.1.53-2.el9.noarch                                                                                                           3/5
+  Verifying        : selinux-policy-targeted-38.1.53-5.el9_6.noarch                                                                                                4/5
+  Verifying        : selinux-policy-targeted-38.1.53-2.el9.noarch                                                                                                  5/5
+Installed products updated.
+
+Upgraded:
+  selinux-policy-38.1.53-5.el9_6.noarch                                         selinux-policy-targeted-38.1.53-5.el9_6.noarch
+Installed:
+  mssql-server-selinux-16.0.4210.1-1.x86_64
+
+Complete!
+[root@ms ~]#
+[root@ms ~]# sudo /opt/mssql/bin/mssql-conf setup
+Choose an edition of SQL Server:
+  1) Evaluation (free, no production use rights, 180-day limit)
+  2) Developer (free, no production use rights)
+  3) Express (free)
+  4) Web (PAID)
+  5) Standard (PAID)
+  6) Enterprise (PAID) - CPU core utilization restricted to 20 physical/40 hyperthreaded
+  7) Enterprise Core (PAID) - CPU core utilization up to Operating System Maximum
+  8) I bought a license through a retail sales channel and have a product key to enter.
+  9) Standard (Billed through Azure) - Use pay-as-you-go billing through Azure.
+ 10) Enterprise Core (Billed through Azure) - Use pay-as-you-go billing through Azure.
+
+Details about editions can be found at
+https://go.microsoft.com/fwlink/?LinkId=2109348&clcid=0x409
+
+Use of PAID editions of this software requires separate licensing through a
+Microsoft Volume Licensing program.
+By choosing a PAID edition, you are verifying that you have the appropriate
+number of licenses in place to install and run this software.
+By choosing an edition billed Pay-As-You-Go through Azure, you are verifying
+that the server and SQL Server will be connected to Azure by installing the
+management agent and Azure extension for SQL Server.
+
+Enter your edition(1-10): 1
+The license terms for this product can be found in
+/usr/share/doc/mssql-server or downloaded from: https://aka.ms/useterms
+
+The privacy statement can be viewed at:
+https://go.microsoft.com/fwlink/?LinkId=853010&clcid=0x409
+
+Enter the SQL Server system administrator password:
+Confirm the SQL Server system administrator password:
+Configuring SQL Server...
+
+The licensing PID was successfully processed. The new edition is [Enterprise Evaluation Edition].
+ForceFlush is enabled for this instance.
+ForceFlush feature is enabled for log durability.
+Setup has completed successfully. SQL Server is now starting.
+[root@ms ~]#
+[root@ms ~]# sudo systemctl status mssql-server
+● mssql-server.service - Microsoft SQL Server Database Engine
+     Loaded: loaded (/usr/lib/systemd/system/mssql-server.service; enabled; preset: disabled)
+     Active: active (running) since Sun 2025-08-24 12:40:50 IST; 1min 53s ago
+       Docs: https://docs.microsoft.com/en-us/sql/linux
+   Main PID: 9325 (sqlservr)
+      Tasks: 154
+     Memory: 706.8M
+        CPU: 11.010s
+     CGroup: /system.slice/mssql-server.service
+             ├─9325 /opt/mssql/bin/sqlservr
+             └─9360 /opt/mssql/bin/sqlservr
+
+Aug 24 12:40:56 ms.localdomain.com sqlservr[9360]: [64B blob data]
+Aug 24 12:40:56 ms.localdomain.com sqlservr[9360]: [158B blob data]
+Aug 24 12:40:56 ms.localdomain.com sqlservr[9360]: [155B blob data]
+Aug 24 12:40:56 ms.localdomain.com sqlservr[9360]: [193B blob data]
+Aug 24 12:40:56 ms.localdomain.com sqlservr[9360]: [66B blob data]
+Aug 24 12:40:57 ms.localdomain.com sqlservr[9360]: [75B blob data]
+Aug 24 12:40:57 ms.localdomain.com sqlservr[9360]: [96B blob data]
+Aug 24 12:40:57 ms.localdomain.com sqlservr[9360]: [100B blob data]
+Aug 24 12:40:57 ms.localdomain.com sqlservr[9360]: [71B blob data]
+Aug 24 12:40:57 ms.localdomain.com sqlservr[9360]: [124B blob data]
+[root@ms ~]#
+[root@ms ~]# sudo firewall-cmd --zone=public --add-port=1433/tcp --permanent
+Warning: ALREADY_ENABLED: 1433:tcp
+success
+[root@ms ~]#
+[root@ms ~]# sudo firewall-cmd --reload
+success
+[root@ms ~]#
+[root@ms ~]# curl https://packages.microsoft.com/config/rhel/9/prod.repo | sudo tee /etc/yum.repos.d/mssql-release.repo
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   413  100   413    0     0   3622      0 --:--:-- --:--:-- --:--:--  3622
+[packages-microsoft-com-prod]
+name=Microsoft Production
+baseurl=https://packages.microsoft.com/rhel/9/prod/
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+# If installing the bare repo file consider installing the gpg key once and then updating
+# this to point to the on-disk location. For example:
+# gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-Microsoft
+gpgkey=https://packages.microsoft.com/keys/microsoft.asc
+sslverify=1
+[root@ms ~]#
+[root@ms ~]# sudo yum install -y mssql-tools18 unixODBC-devel
+Updating Subscription Management repositories.
+Repository packages-microsoft-com-prod is listed more than once in the configuration
+Last metadata expiration check: 0:30:41 ago on Sun 24 Aug 2025 12:36:19 PM IST.
+Package unixODBC-devel-2.3.11-1.rh.x86_64 is already installed.
+Dependencies resolved.
+=======================================================================================================================================================================
+ Package                                Architecture                    Version                             Repository                                            Size
+=======================================================================================================================================================================
+Installing:
+ mssql-tools18                          x86_64                          18.4.1.1-1                          packages-microsoft-com-prod                          293 k
+Installing dependencies:
+ msodbcsql18                            x86_64                          18.5.1.1-1                          packages-microsoft-com-prod                          922 k
+
+Transaction Summary
+=======================================================================================================================================================================
+Install  2 Packages
+
+Total download size: 1.2 M
+Installed size: 3.0 M
+Downloading Packages:
+(1/2): msodbcsql18-18.5.1.1-1.x86_64.rpm                                                                                               818 kB/s | 922 kB     00:01
+(2/2): mssql-tools18-18.4.1.1-1.x86_64.rpm                                                                                             210 kB/s | 293 kB     00:01
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total                                                                                                                                  866 kB/s | 1.2 MB     00:01
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                                                                                                               1/1
+  Running scriptlet: msodbcsql18-18.5.1.1-1.x86_64                                                                                                                 1/2
+The license terms for this product can be downloaded from
+https://aka.ms/odbc18eula and found in
+/usr/share/doc/msodbcsql18/LICENSE.txt . By entering 'YES',
+you indicate that you accept the license terms.
+
+Do you accept the license terms? (Enter YES or NO)
+Yes
+  Installing       : msodbcsql18-18.5.1.1-1.x86_64                                                                                                                 1/2
+  Running scriptlet: msodbcsql18-18.5.1.1-1.x86_64                                                                                                                 1/2
+odbcinst: Driver installed. Usage count increased to 1.
+    Target directory is /etc
+
+  Running scriptlet: mssql-tools18-18.4.1.1-1.x86_64                                                                                                               2/2
+The license terms for this product can be downloaded from
+http://go.microsoft.com/fwlink/?LinkId=746949 and found in
+/usr/share/doc/mssql-tools18/LICENSE.txt . By entering 'YES',
+you indicate that you accept the license terms.
+
+Do you accept the license terms? (Enter YES or NO)
+Yes
+  Installing       : mssql-tools18-18.4.1.1-1.x86_64                                                                                                               2/2
+  Running scriptlet: msodbcsql18-18.5.1.1-1.x86_64                                                                                                                 2/2
+  Verifying        : msodbcsql18-18.5.1.1-1.x86_64                                                                                                                 1/2
+  Verifying        : mssql-tools18-18.4.1.1-1.x86_64                                                                                                               2/2
+Installed products updated.
+
+Installed:
+  msodbcsql18-18.5.1.1-1.x86_64                                                     mssql-tools18-18.4.1.1-1.x86_64
+
+Complete!
+[root@ms ~]#
+[root@ms ~]# sudo yum check-update
+Updating Subscription Management repositories.
+Repository packages-microsoft-com-prod is listed more than once in the configuration
+Last metadata expiration check: 0:31:54 ago on Sun 24 Aug 2025 12:36:19 PM IST.
+
+NetworkManager.x86_64                                                    1:1.52.0-5.el9_6                                              rhel-9-for-x86_64-baseos-rpms
+NetworkManager-adsl.x86_64                                               1:1.52.0-5.el9_6                                              rhel-9-for-x86_64-baseos-rpms
+NetworkManager-bluetooth.x86_64                                          1:1.52.0-5.el9_6                                              rhel-9-for-x86_64-baseos-rpms
+NetworkManager-config-server.noarch                                      1:1.52.0-5.el9_6                                              rhel-9-for-x86_64-baseos-rpms
+NetworkManager-libnm.x86_64                                              1:1.52.0-5.el9_6                                              rhel-9-for-x86_64-baseos-rpms
+NetworkManager-team.x86_64                                               1:1.52.0-5.el9_6                                              rhel-9-for-x86_64-baseos-rpms
+NetworkManager-tui.x86_64                                                1:1.52.0-5.el9_6                                              rhel-9-for-x86_64-baseos-rpms
+NetworkManager-wifi.x86_64                                               1:1.52.0-5.el9_6                                              rhel-9-for-x86_64-baseos-rpms
+NetworkManager-wwan.x86_64                                               1:1.52.0-5.el9_6                                              rhel-9-for-x86_64-baseos-rpms
+at.x86_64                                                                3.1.23-12.el9_6                                               rhel-9-for-x86_64-baseos-rpms
+avahi.x86_64                                                             0.8-22.el9_6.1                                                rhel-9-for-x86_64-baseos-rpms
+avahi-glib.x86_64                                                        0.8-22.el9_6.1                                                rhel-9-for-x86_64-appstream-rpms
+avahi-libs.x86_64                                                        0.8-22.el9_6.1                                                rhel-9-for-x86_64-baseos-rpms
+avahi-tools.x86_64                                                       0.8-22.el9_6.1                                                rhel-9-for-x86_64-appstream-rpms
+bind-libs.x86_64                                                         32:9.16.23-31.el9_6                                           rhel-9-for-x86_64-appstream-rpms
+bind-license.noarch                                                      32:9.16.23-31.el9_6                                           rhel-9-for-x86_64-appstream-rpms
+bind-utils.x86_64                                                        32:9.16.23-31.el9_6                                           rhel-9-for-x86_64-appstream-rpms
+buildah.x86_64                                                           2:1.39.4-2.el9_6                                              rhel-9-for-x86_64-appstream-rpms
+cockpit.x86_64                                                           334.2-1.el9_6                                                 rhel-9-for-x86_64-baseos-rpms
+cockpit-bridge.x86_64                                                    334.2-1.el9_6                                                 rhel-9-for-x86_64-baseos-rpms
+cockpit-packagekit.noarch                                                334.2-1.el9_6                                                 rhel-9-for-x86_64-appstream-rpms
+cockpit-storaged.noarch                                                  334.2-1.el9_6                                                 rhel-9-for-x86_64-appstream-rpms
+cockpit-system.noarch                                                    334.2-1.el9_6                                                 rhel-9-for-x86_64-baseos-rpms
+cockpit-ws.x86_64                                                        334.2-1.el9_6                                                 rhel-9-for-x86_64-baseos-rpms
+container-selinux.noarch                                                 4:2.237.0-1.el9_6                                             rhel-9-for-x86_64-appstream-rpms
+containernetworking-plugins.x86_64                                       1:1.6.2-2.el9_6                                               rhel-9-for-x86_64-appstream-rpms
+cpp.x86_64                                                               11.5.0-5.el9_5                                                rhel-9-for-x86_64-appstream-rpms
+cronie.x86_64                                                            1.5.7-14.el9_6                                                rhel-9-for-x86_64-baseos-rpms
+cronie-anacron.x86_64                                                    1.5.7-14.el9_6                                                rhel-9-for-x86_64-baseos-rpms
+crun.x86_64                                                              1.22-1.el9_6                                                  rhel-9-for-x86_64-appstream-rpms
+cryptsetup.x86_64                                                        2.7.2-3.el9_6.1                                               rhel-9-for-x86_64-baseos-rpms
+cryptsetup-libs.x86_64                                                   2.7.2-3.el9_6.1                                               rhel-9-for-x86_64-baseos-rpms
+curl.x86_64                                                              7.76.1-31.el9_6.1                                             rhel-9-for-x86_64-baseos-rpms
+device-mapper-multipath.x86_64                                           0.8.7-35.el9_6.1                                              rhel-9-for-x86_64-baseos-rpms
+device-mapper-multipath-libs.x86_64                                      0.8.7-35.el9_6.1                                              rhel-9-for-x86_64-baseos-rpms
+dracut.x86_64                                                            057-88.git20250311.el9_6                                      rhel-9-for-x86_64-baseos-rpms
+dracut-config-rescue.x86_64                                              057-88.git20250311.el9_6                                      rhel-9-for-x86_64-baseos-rpms
+dracut-network.x86_64                                                    057-88.git20250311.el9_6                                      rhel-9-for-x86_64-baseos-rpms
+dracut-squash.x86_64                                                     057-88.git20250311.el9_6                                      rhel-9-for-x86_64-baseos-rpms
+elfutils-debuginfod-client.x86_64                                        0.192-6.el9_6                                                 rhel-9-for-x86_64-baseos-rpms
+elfutils-default-yama-scope.noarch                                       0.192-6.el9_6                                                 rhel-9-for-x86_64-baseos-rpms
+elfutils-libelf.x86_64                                                   0.192-6.el9_6                                                 rhel-9-for-x86_64-baseos-rpms
+elfutils-libs.x86_64                                                     0.192-6.el9_6                                                 rhel-9-for-x86_64-baseos-rpms
+emacs-filesystem.noarch                                                  1:27.2-14.el9_6.2                                             rhel-9-for-x86_64-appstream-rpms
+expat.x86_64                                                             2.5.0-5.el9_6                                                 rhel-9-for-x86_64-baseos-rpms
+firefox.x86_64                                                           128.13.0-1.el9_6                                              rhel-9-for-x86_64-appstream-rpms
+gdk-pixbuf2.x86_64                                                       2.42.6-6.el9_6                                                rhel-9-for-x86_64-appstream-rpms
+gdk-pixbuf2-modules.x86_64                                               2.42.6-6.el9_6                                                rhel-9-for-x86_64-appstream-rpms
+gdm.x86_64                                                               1:40.1-30.el9_6                                               rhel-9-for-x86_64-appstream-rpms
+ghostscript.x86_64                                                       9.54.0-19.el9_6                                               rhel-9-for-x86_64-appstream-rpms
+ghostscript-tools-fonts.x86_64                                           9.54.0-19.el9_6                                               rhel-9-for-x86_64-appstream-rpms
+ghostscript-tools-printing.x86_64                                        9.54.0-19.el9_6                                               rhel-9-for-x86_64-appstream-rpms
+glib2.x86_64                                                             2.68.4-16.el9_6.2                                             rhel-9-for-x86_64-baseos-rpms
+glibc.x86_64                                                             2.34-168.el9_6.23                                             rhel-9-for-x86_64-baseos-rpms
+glibc-all-langpacks.x86_64                                               2.34-168.el9_6.23                                             rhel-9-for-x86_64-baseos-rpms
+glibc-common.x86_64                                                      2.34-168.el9_6.23                                             rhel-9-for-x86_64-baseos-rpms
+glibc-gconv-extra.x86_64                                                 2.34-168.el9_6.23                                             rhel-9-for-x86_64-baseos-rpms
+glibc-langpack-en.x86_64                                                 2.34-168.el9_6.23                                             rhel-9-for-x86_64-baseos-rpms
+gnome-remote-desktop.x86_64                                              40.0-11.el9_6                                                 rhel-9-for-x86_64-appstream-rpms
+gnome-session.x86_64                                                     40.1.1-10.el9_6                                               rhel-9-for-x86_64-appstream-rpms
+gnome-session-wayland-session.x86_64                                     40.1.1-10.el9_6                                               rhel-9-for-x86_64-appstream-rpms
+gnome-session-xsession.x86_64                                            40.1.1-10.el9_6                                               rhel-9-for-x86_64-appstream-rpms
+gnome-shell.x86_64                                                       40.10-25.el9_6                                                rhel-9-for-x86_64-appstream-rpms
+gstreamer1-plugins-bad-free.x86_64                                       1.22.12-4.el9_6                                               rhel-9-for-x86_64-appstream-rpms
+gstreamer1-plugins-bad-free-libs.x86_64                                  1.22.12-4.el9_6                                               rhel-9-for-x86_64-appstream-rpms
+iputils.x86_64                                                           20210202-11.el9_6.1                                           rhel-9-for-x86_64-baseos-rpms
+iwl100-firmware.noarch                                                   39.31.5.1-151.3.el9_6                                         rhel-9-for-x86_64-baseos-rpms
+iwl1000-firmware.noarch                                                  1:39.31.5.1-151.3.el9_6                                       rhel-9-for-x86_64-baseos-rpms
+iwl105-firmware.noarch                                                   18.168.6.1-151.3.el9_6                                        rhel-9-for-x86_64-baseos-rpms
+iwl135-firmware.noarch                                                   18.168.6.1-151.3.el9_6                                        rhel-9-for-x86_64-baseos-rpms
+iwl2000-firmware.noarch                                                  18.168.6.1-151.3.el9_6                                        rhel-9-for-x86_64-baseos-rpms
+iwl2030-firmware.noarch                                                  18.168.6.1-151.3.el9_6                                        rhel-9-for-x86_64-baseos-rpms
+iwl3160-firmware.noarch                                                  1:25.30.13.0-151.3.el9_6                                      rhel-9-for-x86_64-baseos-rpms
+iwl5000-firmware.noarch                                                  8.83.5.1_1-151.3.el9_6                                        rhel-9-for-x86_64-baseos-rpms
+iwl5150-firmware.noarch                                                  8.24.2.2-151.3.el9_6                                          rhel-9-for-x86_64-baseos-rpms
+iwl6000g2a-firmware.noarch                                               18.168.6.1-151.3.el9_6                                        rhel-9-for-x86_64-baseos-rpms
+iwl6000g2b-firmware.noarch                                               18.168.6.1-151.3.el9_6                                        rhel-9-for-x86_64-baseos-rpms
+iwl6050-firmware.noarch                                                  41.28.5.1-151.3.el9_6                                         rhel-9-for-x86_64-baseos-rpms
+iwl7260-firmware.noarch                                                  1:25.30.13.0-151.3.el9_6                                      rhel-9-for-x86_64-baseos-rpms
+jq.x86_64                                                                1.6-17.el9_6.2                                                rhel-9-for-x86_64-baseos-rpms
+kernel.x86_64                                                            5.14.0-570.35.1.el9_6                                         rhel-9-for-x86_64-baseos-rpms
+kernel-core.x86_64                                                       5.14.0-570.35.1.el9_6                                         rhel-9-for-x86_64-baseos-rpms
+kernel-modules.x86_64                                                    5.14.0-570.35.1.el9_6                                         rhel-9-for-x86_64-baseos-rpms
+kernel-modules-core.x86_64                                               5.14.0-570.35.1.el9_6                                         rhel-9-for-x86_64-baseos-rpms
+kernel-tools.x86_64                                                      5.14.0-570.35.1.el9_6                                         rhel-9-for-x86_64-baseos-rpms
+kernel-tools-libs.x86_64                                                 5.14.0-570.35.1.el9_6                                         rhel-9-for-x86_64-baseos-rpms
+kexec-tools.x86_64                                                       2.0.29-5.el9_6.2                                              rhel-9-for-x86_64-baseos-rpms
+kmod-kvdo.x86_64                                                         8.2.5.14-163.el9_6                                            rhel-9-for-x86_64-baseos-rpms
+kpartx.x86_64                                                            0.8.7-35.el9_6.1                                              rhel-9-for-x86_64-baseos-rpms
+kpatch.noarch                                                            0.9.7-3.el9_6                                                 rhel-9-for-x86_64-baseos-rpms
+kpatch-dnf.noarch                                                        0.9.7_0.5-3.el9_6                                             rhel-9-for-x86_64-baseos-rpms
+krb5-libs.x86_64                                                         1.21.1-8.el9_6                                                rhel-9-for-x86_64-baseos-rpms
+libappstream-glib.x86_64                                                 0.7.18-5.el9_4                                                rhel-9-for-x86_64-appstream-rpms
+libarchive.x86_64                                                        3.5.3-6.el9_6                                                 rhel-9-for-x86_64-baseos-rpms
+libatomic.x86_64                                                         11.5.0-5.el9_5                                                rhel-9-for-x86_64-baseos-rpms
+libblockdev.x86_64                                                       2.28-14.el9_6                                                 rhel-9-for-x86_64-appstream-rpms
+libblockdev-crypto.x86_64                                                2.28-14.el9_6                                                 rhel-9-for-x86_64-appstream-rpms
+libblockdev-fs.x86_64                                                    2.28-14.el9_6                                                 rhel-9-for-x86_64-appstream-rpms
+libblockdev-loop.x86_64                                                  2.28-14.el9_6                                                 rhel-9-for-x86_64-appstream-rpms
+libblockdev-lvm.x86_64                                                   2.28-14.el9_6                                                 rhel-9-for-x86_64-appstream-rpms
+libblockdev-mdraid.x86_64                                                2.28-14.el9_6                                                 rhel-9-for-x86_64-appstream-rpms
+libblockdev-part.x86_64                                                  2.28-14.el9_6                                                 rhel-9-for-x86_64-appstream-rpms
+libblockdev-swap.x86_64                                                  2.28-14.el9_6                                                 rhel-9-for-x86_64-appstream-rpms
+libblockdev-utils.x86_64                                                 2.28-14.el9_6                                                 rhel-9-for-x86_64-appstream-rpms
+libcurl.x86_64                                                           7.76.1-31.el9_6.1                                             rhel-9-for-x86_64-baseos-rpms
+libdb.x86_64                                                             5.3.28-57.el9_6                                               rhel-9-for-x86_64-baseos-rpms
+libdnf-plugin-subscription-manager.x86_64                                1.29.45.1-1.el9_6                                             rhel-9-for-x86_64-baseos-rpms
+libertas-sd8787-firmware.noarch                                          20250716-151.3.el9_6                                          rhel-9-for-x86_64-baseos-rpms
+libgcc.x86_64                                                            11.5.0-5.el9_5                                                rhel-9-for-x86_64-baseos-rpms
+libgomp.x86_64                                                           11.5.0-5.el9_5                                                rhel-9-for-x86_64-baseos-rpms
+libgs.x86_64                                                             9.54.0-19.el9_6                                               rhel-9-for-x86_64-appstream-rpms
+libicu.x86_64                                                            67.1-10.el9_6                                                 rhel-9-for-x86_64-baseos-rpms
+libipa_hbac.x86_64                                                       2.9.6-4.el9_6.2                                               rhel-9-for-x86_64-baseos-rpms
+libldb.x86_64                                                            4.21.3-7.el9_6                                                rhel-9-for-x86_64-baseos-rpms
+libsmbclient.x86_64                                                      4.21.3-7.el9_6                                                rhel-9-for-x86_64-baseos-rpms
+libsoup.x86_64                                                           2.72.0-10.el9_6.2                                             rhel-9-for-x86_64-appstream-rpms
+libsss_certmap.x86_64                                                    2.9.6-4.el9_6.2                                               rhel-9-for-x86_64-baseos-rpms
+libsss_idmap.x86_64                                                      2.9.6-4.el9_6.2                                               rhel-9-for-x86_64-baseos-rpms
+libsss_nss_idmap.x86_64                                                  2.9.6-4.el9_6.2                                               rhel-9-for-x86_64-baseos-rpms
+libsss_sudo.x86_64                                                       2.9.6-4.el9_6.2                                               rhel-9-for-x86_64-baseos-rpms
+libstdc++.x86_64                                                         11.5.0-5.el9_5                                                rhel-9-for-x86_64-baseos-rpms
+libvpx.x86_64                                                            1.9.0-9.el9_6                                                 rhel-9-for-x86_64-appstream-rpms
+libwbclient.x86_64                                                       4.21.3-7.el9_6                                                rhel-9-for-x86_64-baseos-rpms
+libxml2.x86_64                                                           2.9.13-12.el9_6                                               rhel-9-for-x86_64-baseos-rpms
+libxslt.x86_64                                                           1.1.34-13.el9_6                                               rhel-9-for-x86_64-appstream-rpms
+linux-firmware.noarch                                                    20250716-151.3.el9_6                                          rhel-9-for-x86_64-baseos-rpms
+linux-firmware-whence.noarch                                             20250716-151.3.el9_6                                          rhel-9-for-x86_64-baseos-rpms
+lockdev.x86_64                                                           1.0.4-0.38.20111007git.el9_6                                  rhel-9-for-x86_64-baseos-rpms
+mdadm.x86_64                                                             4.3-4.el9_5                                                   rhel-9-for-x86_64-baseos-rpms
+microcode_ctl.noarch                                                     4:20250211-1.20250512.1.el9_6                                 rhel-9-for-x86_64-baseos-rpms
+mpg123-libs.x86_64                                                       1.32.9-1.el9_5                                                rhel-9-for-x86_64-appstream-rpms
+mutter.x86_64                                                            40.9-25.el9_6.1                                               rhel-9-for-x86_64-appstream-rpms
+ncurses.x86_64                                                           6.2-10.20210508.el9_6.2                                       rhel-9-for-x86_64-baseos-rpms
+ncurses-base.noarch                                                      6.2-10.20210508.el9_6.2                                       rhel-9-for-x86_64-baseos-rpms
+ncurses-libs.x86_64                                                      6.2-10.20210508.el9_6.2                                       rhel-9-for-x86_64-baseos-rpms
+netavark.x86_64                                                          2:1.14.1-1.el9_6                                              rhel-9-for-x86_64-appstream-rpms
+netronome-firmware.noarch                                                20250716-151.3.el9_6                                          rhel-9-for-x86_64-baseos-rpms
+nvme-cli.x86_64                                                          2.11-6.el9_6                                                  rhel-9-for-x86_64-baseos-rpms
+osinfo-db.noarch                                                         20250124-2.el9_6                                              rhel-9-for-x86_64-appstream-rpms
+p11-kit.x86_64                                                           0.25.3-3.el9_5                                                rhel-9-for-x86_64-baseos-rpms
+p11-kit-server.x86_64                                                    0.25.3-3.el9_5                                                rhel-9-for-x86_64-appstream-rpms
+p11-kit-trust.x86_64                                                     0.25.3-3.el9_5                                                rhel-9-for-x86_64-baseos-rpms
+pam.x86_64                                                               1.5.1-25.el9_6                                                rhel-9-for-x86_64-baseos-rpms
+passt.x86_64                                                             0^20250217.ga1e48a0-10.el9_6                                  rhel-9-for-x86_64-appstream-rpms
+passt-selinux.noarch                                                     0^20250217.ga1e48a0-10.el9_6                                  rhel-9-for-x86_64-appstream-rpms
+perl-AutoLoader.noarch                                                   5.74-481.1.el9_6                                              rhel-9-for-x86_64-appstream-rpms
+perl-B.x86_64                                                            1.80-481.1.el9_6                                              rhel-9-for-x86_64-appstream-rpms
+perl-Class-Struct.noarch                                                 0.66-481.1.el9_6                                              rhel-9-for-x86_64-appstream-rpms
+perl-DynaLoader.x86_64                                                   1.47-481.1.el9_6                                              rhel-9-for-x86_64-appstream-rpms
+perl-Errno.x86_64                                                        1.30-481.1.el9_6                                              rhel-9-for-x86_64-appstream-rpms
+perl-Fcntl.x86_64                                                        1.13-481.1.el9_6                                              rhel-9-for-x86_64-appstream-rpms
+perl-File-Basename.noarch                                                2.85-481.1.el9_6                                              rhel-9-for-x86_64-appstream-rpms
+perl-File-Find.noarch                                                    1.37-481.1.el9_6                                              rhel-9-for-x86_64-appstream-rpms
+perl-File-stat.noarch                                                    1.09-481.1.el9_6                                              rhel-9-for-x86_64-appstream-rpms
+perl-FileHandle.noarch                                                   2.03-481.1.el9_6                                              rhel-9-for-x86_64-appstream-rpms
+perl-Getopt-Std.noarch                                                   1.12-481.1.el9_6                                              rhel-9-for-x86_64-appstream-rpms
+perl-IO.x86_64                                                           1.43-481.1.el9_6                                              rhel-9-for-x86_64-appstream-rpms
+perl-IPC-Open3.noarch                                                    1.21-481.1.el9_6                                              rhel-9-for-x86_64-appstream-rpms
+perl-Math-Complex.noarch                                                 1.59-481.1.el9_6                                              rhel-9-for-x86_64-appstream-rpms
+perl-NDBM_File.x86_64                                                    1.15-481.1.el9_6                                              rhel-9-for-x86_64-appstream-rpms
+perl-POSIX.x86_64                                                        1.94-481.1.el9_6                                              rhel-9-for-x86_64-appstream-rpms
+perl-SelectSaver.noarch                                                  1.02-481.1.el9_6                                              rhel-9-for-x86_64-appstream-rpms
+perl-Symbol.noarch                                                       1.08-481.1.el9_6                                              rhel-9-for-x86_64-appstream-rpms
+perl-base.noarch                                                         2.27-481.1.el9_6                                              rhel-9-for-x86_64-appstream-rpms
+perl-if.noarch                                                           0.60.800-481.1.el9_6                                          rhel-9-for-x86_64-appstream-rpms
+perl-interpreter.x86_64                                                  4:5.32.1-481.1.el9_6                                          rhel-9-for-x86_64-appstream-rpms
+perl-libs.x86_64                                                         4:5.32.1-481.1.el9_6                                          rhel-9-for-x86_64-appstream-rpms
+perl-locale.noarch                                                       1.09-481.1.el9_6                                              rhel-9-for-x86_64-appstream-rpms
+perl-mro.x86_64                                                          1.23-481.1.el9_6                                              rhel-9-for-x86_64-appstream-rpms
+perl-overload.noarch                                                     1.31-481.1.el9_6                                              rhel-9-for-x86_64-appstream-rpms
+perl-overloading.noarch                                                  0.02-481.1.el9_6                                              rhel-9-for-x86_64-appstream-rpms
+perl-subs.noarch                                                         1.03-481.1.el9_6                                              rhel-9-for-x86_64-appstream-rpms
+perl-vars.noarch                                                         1.05-481.1.el9_6                                              rhel-9-for-x86_64-appstream-rpms
+pixman.x86_64                                                            0.40.0-6.el9_3                                                rhel-9-for-x86_64-appstream-rpms
+podman.x86_64                                                            5:5.4.0-12.el9_6                                              rhel-9-for-x86_64-appstream-rpms
+python-unversioned-command.noarch                                        3.9.21-2.el9_6.1                                              rhel-9-for-x86_64-appstream-rpms
+python3.x86_64                                                           3.9.21-2.el9_6.1                                              rhel-9-for-x86_64-baseos-rpms
+python3-cloud-what.x86_64                                                1.29.45.1-1.el9_6                                             rhel-9-for-x86_64-baseos-rpms
+python3-libs.x86_64                                                      3.9.21-2.el9_6.1                                              rhel-9-for-x86_64-baseos-rpms
+python3-libxml2.x86_64                                                   2.9.13-12.el9_6                                               rhel-9-for-x86_64-baseos-rpms
+python3-perf.x86_64                                                      5.14.0-570.35.1.el9_6                                         rhel-9-for-x86_64-appstream-rpms
+python3-requests.noarch                                                  2.25.1-10.el9_6                                               rhel-9-for-x86_64-baseos-rpms
+python3-setuptools.noarch                                                53.0.0-13.el9_6.1                                             rhel-9-for-x86_64-baseos-rpms
+python3-setuptools-wheel.noarch                                          53.0.0-13.el9_6.1                                             rhel-9-for-x86_64-baseos-rpms
+python3-subscription-manager-rhsm.x86_64                                 1.29.45.1-1.el9_6                                             rhel-9-for-x86_64-baseos-rpms
+qemu-guest-agent.x86_64                                                  17:9.1.0-15.el9_6.7                                           rhel-9-for-x86_64-appstream-rpms
+redhat-backgrounds.noarch                                                90.5-1.el9_6.1                                                rhel-9-for-x86_64-appstream-rpms
+redhat-logos.x86_64                                                      90.5-1.el9_6.1                                                rhel-9-for-x86_64-appstream-rpms
+rhc.x86_64                                                               1:0.2.7-1.el9_6                                               rhel-9-for-x86_64-appstream-rpms
+samba-client-libs.x86_64                                                 4.21.3-7.el9_6                                                rhel-9-for-x86_64-baseos-rpms
+samba-common.noarch                                                      4.21.3-7.el9_6                                                rhel-9-for-x86_64-baseos-rpms
+samba-common-libs.x86_64                                                 4.21.3-7.el9_6                                                rhel-9-for-x86_64-baseos-rpms
+sos.noarch                                                               4.9.2-1.el9_6                                                 rhel-9-for-x86_64-baseos-rpms
+sqlite-libs.x86_64                                                       3.34.1-8.el9_6                                                rhel-9-for-x86_64-baseos-rpms
+sssd.x86_64                                                              2.9.6-4.el9_6.2                                               rhel-9-for-x86_64-baseos-rpms
+sssd-ad.x86_64                                                           2.9.6-4.el9_6.2                                               rhel-9-for-x86_64-baseos-rpms
+sssd-client.x86_64                                                       2.9.6-4.el9_6.2                                               rhel-9-for-x86_64-baseos-rpms
+sssd-common.x86_64                                                       2.9.6-4.el9_6.2                                               rhel-9-for-x86_64-baseos-rpms
+sssd-common-pac.x86_64                                                   2.9.6-4.el9_6.2                                               rhel-9-for-x86_64-baseos-rpms
+sssd-ipa.x86_64                                                          2.9.6-4.el9_6.2                                               rhel-9-for-x86_64-baseos-rpms
+sssd-kcm.x86_64                                                          2.9.6-4.el9_6.2                                               rhel-9-for-x86_64-baseos-rpms
+sssd-krb5.x86_64                                                         2.9.6-4.el9_6.2                                               rhel-9-for-x86_64-baseos-rpms
+sssd-krb5-common.x86_64                                                  2.9.6-4.el9_6.2                                               rhel-9-for-x86_64-baseos-rpms
+sssd-ldap.x86_64                                                         2.9.6-4.el9_6.2                                               rhel-9-for-x86_64-baseos-rpms
+sssd-proxy.x86_64                                                        2.9.6-4.el9_6.2                                               rhel-9-for-x86_64-baseos-rpms
+subscription-manager.x86_64                                              1.29.45.1-1.el9_6                                             rhel-9-for-x86_64-baseos-rpms
+sudo.x86_64                                                              1.9.5p2-10.el9_6.1                                            rhel-9-for-x86_64-baseos-rpms
+systemd.x86_64                                                           252-51.el9_6.1                                                rhel-9-for-x86_64-baseos-rpms
+systemd-libs.x86_64                                                      252-51.el9_6.1                                                rhel-9-for-x86_64-baseos-rpms
+systemd-pam.x86_64                                                       252-51.el9_6.1                                                rhel-9-for-x86_64-baseos-rpms
+systemd-rpm-macros.noarch                                                252-51.el9_6.1                                                rhel-9-for-x86_64-baseos-rpms
+systemd-udev.x86_64                                                      252-51.el9_6.1                                                rhel-9-for-x86_64-baseos-rpms
+texlive-lib.x86_64                                                       9:20200406-26.el9_2                                           rhel-9-for-x86_64-appstream-rpms
+tuned.noarch                                                             2.25.1-2.el9_6                                                rhel-9-for-x86_64-baseos-rpms
+tuned-ppd.noarch                                                         2.25.1-2.el9_6                                                rhel-9-for-x86_64-appstream-rpms
+tzdata.noarch                                                            2025b-1.el9                                                   rhel-9-for-x86_64-baseos-rpms
+vim-common.x86_64                                                        2:8.2.2637-22.el9_6                                           rhel-9-for-x86_64-appstream-rpms
+vim-enhanced.x86_64                                                      2:8.2.2637-22.el9_6                                           rhel-9-for-x86_64-appstream-rpms
+vim-filesystem.noarch                                                    2:8.2.2637-22.el9_6                                           rhel-9-for-x86_64-baseos-rpms
+vim-minimal.x86_64                                                       2:8.2.2637-22.el9_6                                           rhel-9-for-x86_64-baseos-rpms
+webkit2gtk3.x86_64                                                       2.48.5-1.el9_6                                                rhel-9-for-x86_64-appstream-rpms
+webkit2gtk3-jsc.x86_64                                                   2.48.5-1.el9_6                                                rhel-9-for-x86_64-appstream-rpms
+which.x86_64                                                             2.21-30.el9_6                                                 rhel-9-for-x86_64-baseos-rpms
+xdg-utils.noarch                                                         1.1.3-13.el9_6                                                rhel-9-for-x86_64-appstream-rpms
+xfsdump.x86_64                                                           3.1.12-4.el9_3                                                rhel-9-for-x86_64-baseos-rpms
+xorg-x11-drv-libinput.x86_64                                             1.0.1-4.el9_6                                                 rhel-9-for-x86_64-appstream-rpms
+xorg-x11-server-Xorg.x86_64                                              1.20.11-31.el9_6                                              rhel-9-for-x86_64-appstream-rpms
+xorg-x11-server-Xwayland.x86_64                                          23.2.7-4.el9_6                                                rhel-9-for-x86_64-appstream-rpms
+xorg-x11-server-common.x86_64                                            1.20.11-31.el9_6                                              rhel-9-for-x86_64-appstream-rpms
+yelp.x86_64                                                              2:40.3-2.el9_6.1                                              rhel-9-for-x86_64-appstream-rpms
+yelp-libs.x86_64                                                         2:40.3-2.el9_6.1                                              rhel-9-for-x86_64-appstream-rpms
+yelp-xsl.noarch                                                          40.2-1.el9_6.1                                                rhel-9-for-x86_64-appstream-rpms
+[root@ms ~]#
+[root@ms ~]# sudo yum update mssql-tools18
+Updating Subscription Management repositories.
+Repository packages-microsoft-com-prod is listed more than once in the configuration
+Last metadata expiration check: 0:32:35 ago on Sun 24 Aug 2025 12:36:19 PM IST.
+Dependencies resolved.
+Nothing to do.
+Complete!
+[root@ms ~]#
+[root@ms ~]# echo 'export PATH="$PATH:/opt/mssql-tools18/bin"' >> ~/.bash_profile
+[root@ms ~]# source ~/.bash_profile
+[root@ms ~]# echo 'export PATH="$PATH:/opt/mssql-tools18/bin"' >> ~/.bashrc
+[root@ms ~]# source ~/.bash_profile
+[root@ms ~]#
+[root@ms ~]# cat ~/.bash_profile
+# .bash_profile
+
+# Get the aliases and functions
+if [ -f ~/.bashrc ]; then
+        . ~/.bashrc
+fi
+
+# User specific environment and startup programs
+export PATH="$PATH:/opt/mssql-tools/bin"
+export PATH="$PATH:/opt/mssql-tools18/bin"
+[root@ms ~]#
+[root@ms ~]# # Step 4: Connect to SQL Server on RHEL
+[root@ms ~]#
+[root@ms ~]# sqlcmd -S localhost -U sa -P 'Sqlserver@123' -N -C
+1> GO
+1>
+2> select name from sys.databases;
+3> go;
+4>
+5> GO
+Msg 102, Level 15, State 1, Server ms, Line 3
+Incorrect syntax near 'go'.
+1>
+2> select Name from sys.databases;
+3> GO
+Name
+--------------------------------------------------------------------------------------------------------------------------------
+master
+tempdb
+model
+msdb
+
+(4 rows affected)
+1>
+2> exit
+[root@ms ~]#
