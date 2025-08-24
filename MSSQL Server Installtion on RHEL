@@ -673,3 +673,82 @@ msdb
 1>
 2> exit
 [root@ms ~]#
+[root@ms ~]# sudo systemctl status mssql-server
+● mssql-server.service - Microsoft SQL Server Database Engine
+     Loaded: loaded (/usr/lib/systemd/system/mssql-server.service; enabled; preset: disabled)
+     Active: active (running) since Sun 2025-08-24 12:40:50 IST; 49min ago
+       Docs: https://docs.microsoft.com/en-us/sql/linux
+   Main PID: 9325 (sqlservr)
+      Tasks: 177
+     Memory: 851.1M
+        CPU: 1min 48.010s
+     CGroup: /system.slice/mssql-server.service
+             ├─9325 /opt/mssql/bin/sqlservr
+             └─9360 /opt/mssql/bin/sqlservr
+
+Aug 24 12:40:56 ms.localdomain.com sqlservr[9360]: [193B blob data]
+Aug 24 12:40:56 ms.localdomain.com sqlservr[9360]: [66B blob data]
+Aug 24 12:40:57 ms.localdomain.com sqlservr[9360]: [75B blob data]
+Aug 24 12:40:57 ms.localdomain.com sqlservr[9360]: [96B blob data]
+Aug 24 12:40:57 ms.localdomain.com sqlservr[9360]: [100B blob data]
+Aug 24 12:40:57 ms.localdomain.com sqlservr[9360]: [71B blob data]
+Aug 24 12:40:57 ms.localdomain.com sqlservr[9360]: [124B blob data]
+Aug 24 12:48:08 ms.localdomain.com sqlservr[9360]: [156B blob data]
+Aug 24 12:48:08 ms.localdomain.com sqlservr[9360]: [195B blob data]
+Aug 24 12:52:51 ms.localdomain.com sqlservr[9360]: [71B blob data]
+[root@ms ~]#
+[root@ms ~]# sudo ss -tulnp | grep 1433
+tcp   LISTEN 0      128          0.0.0.0:1433       0.0.0.0:*    users:(("sqlservr",pid=9360,fd=114))
+tcp   LISTEN 0      128                *:1433             *:*    users:(("sqlservr",pid=9360,fd=108))
+[root@ms ~]#
+[root@ms ~]# sudo firewall-cmd --add-port=1433/tcp --permanent
+Warning: ALREADY_ENABLED: 1433:tcp
+success
+[root@ms ~]#
+[root@ms ~]# sudo firewall-cmd --reload
+success
+[root@ms ~]#
+[root@ms ~]# ip addr show
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host
+       valid_lft forever preferred_lft forever
+2: enp0s3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 08:00:27:08:ac:b5 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.0.136/24 brd 192.168.0.255 scope global dynamic noprefixroute enp0s3
+       valid_lft 6101sec preferred_lft 6101sec
+    inet6 fe80::a00:27ff:fe08:acb5/64 scope link noprefixroute
+       valid_lft forever preferred_lft forever
+[root@ms ~]#
+[root@ms ~]# telnet 192.168.0.150 1433
+bash: telnet: command not found...
+
+^C
+[root@ms ~]#
+[root@ms ~]# telnet 192.168.0.136 1433
+bash: telnet: command not found...
+Install package 'telnet' to provide command 'telnet'? [N/y] yes
+
+
+ * Waiting in queue...
+ * Loading list of packages....
+The following packages have to be installed:
+ telnet-1:0.17-85.el9.x86_64    The client program for the Telnet remote login protocol
+Proceed with changes? [N/y] yes
+
+
+ * Waiting in queue...
+ * Waiting for authentication...
+ * Waiting in queue...
+ * Downloading packages...
+ * Requesting data...
+ * Testing changes...
+ * Installing packages...
+Trying 192.168.0.136...
+Connected to 192.168.0.136.
+Escape character is '^]'.
+Connection closed by foreign host.
+
+[root@ms ~]#
